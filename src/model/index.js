@@ -1,0 +1,1 @@
+module.exports.Salespeople = require('./salespeople.model')
