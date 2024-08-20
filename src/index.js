@@ -14,7 +14,6 @@ const path = require('path');
 const app = express();
 googleLoginProvider();
 
-
 const _dirname = path.resolve();
 
 const __swaggerDistPath = path.join(_dirname, 'node_modules', 'swagger-ui-dist'); //install swagger-ui-dist
