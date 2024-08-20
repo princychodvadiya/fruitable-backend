@@ -3,7 +3,6 @@ const Categories = require("../model/categories.model")
 const listCategories = async (req, res) => {
     console.log("cateee", req.query.page, req.query.pageSize);
     try {
-
         const page = parseInt(req.query.page)
         const pageSize = parseInt(req.query.pageSize)
 
