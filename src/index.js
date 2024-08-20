@@ -34,6 +34,8 @@ app.use(
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+connectDB();
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
@@ -43,16 +45,18 @@ app.use(cors({
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-connectDB();
+
 // connectChat()    not sported.
 
 // facebookLoginProvider()
+
+app.use('/api/v1', routes);
 
 app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
-app.use('/api/v1', routes);
+
 
 app.listen(8000, () => {
     console.log("server start at port 8000.");
