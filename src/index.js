@@ -2,17 +2,17 @@ require('dotenv').config()
 const express = require('express');
 const routes = require('./routes/api/v1/index');
 const connectDB = require('./db/mongodb');
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 var cors = require('cors');
-const passport = require('passport');
-const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
+// const passport = require('passport');
+// const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
 // const connectChat = require('./utils/socketIO');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const path = require('path');
 
 const app = express();
-googleLoginProvider();
+// googleLoginProvider();
 
 const _dirname = path.resolve();
 
@@ -37,14 +37,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 connectDB();
 
 app.use(express.json())
-app.use(cookieParser())
+// app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // connectChat()    not sported.
 
