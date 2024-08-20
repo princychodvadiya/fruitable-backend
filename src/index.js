@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const routes = require('./routes/api/v1/index');
 const connectDB = require('./db/mongodb');
-// const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 var cors = require('cors');
 // const passport = require('passport');
 // const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
@@ -37,7 +37,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 connectDB();
 
 app.use(express.json())
-// app.use(cookieParser())
+app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
