@@ -6,13 +6,31 @@ const cookieParser = require('cookie-parser')
 var cors = require('cors');
 const passport = require('passport');
 const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
-const connectChat = require('./utils/socketIO');
+// const connectChat = require('./utils/socketIO');
 const swaggerUi = require('swagger-ui-express');
 YAML = require('yamljs');
+const path = require('path');
 
 const app = express();
+googleLoginProvider();
 
-const swaggerDocument = YAML.load('./src/api.yaml')
+const _dirname = path.resolve();
+
+const __swaggerDistPath = path.join(_dirname, 'node_modules', 'swagger-ui-dist'); //install swagger-ui-dist
+
+const swaggerDocument = YAML.load(path.resolve('./public', 'api.yaml'));
+
+app.use(
+    '/api/docs',
+    express.static(__swaggerDistPath, { index: false }), // Serve Swagger UI assets
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, {
+        swaggerOptions: {
+            url: '/public/api.yaml' // Path to your YAML file
+        }
+    })
+);
+// const swaggerDocument = YAML.load('./src/api.yaml')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -26,9 +44,14 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 app.use(passport.initialize());
 app.use(passport.session());
 connectDB();
-connectChat()
-googleLoginProvider();
+// connectChat()    not sported.
+
 // facebookLoginProvider()
+
+app.get('/', (req, res) => {
+    res.send('Hello World')
+})
+
 app.use('/api/v1', routes);
 
 app.listen(8000, () => {
