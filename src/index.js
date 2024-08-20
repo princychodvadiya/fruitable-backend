@@ -5,14 +5,14 @@ const connectDB = require('./db/mongodb');
 const cookieParser = require('cookie-parser')
 var cors = require('cors');
 const passport = require('passport');
-// const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
+const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
 // const connectChat = require('./utils/socketIO');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const path = require('path');
 
 const app = express();
-// googleLoginProvider();
+googleLoginProvider();
 
 const _dirname = path.resolve();
 
@@ -34,18 +34,20 @@ app.use(
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-connectDB();
 
-app.use(express.json())
+
+
 app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
+app.use(express.json())
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+connectDB();
 // connectChat()    not sported.
 
 // facebookLoginProvider()
