@@ -8,7 +8,7 @@ const passport = require('passport');
 const { facebookLoginProvider, googleLoginProvider } = require('./utils/provider');
 // const connectChat = require('./utils/socketIO');
 const swaggerUi = require('swagger-ui-express');
-YAML = require('yamljs');
+const YAML = require('yamljs');
 const path = require('path');
 
 const app = express();
