@@ -42,7 +42,7 @@ const AccRefToken = async (id) => {
 const register = async (req, res) => {
     try {
         console.log(req.body);
-        // console.log(req.file);
+        console.log(req.file);
 
         const { email, password } = req.body;
         const user = await Users.findOne(
@@ -66,7 +66,7 @@ const register = async (req, res) => {
             });
         }
 
-        const newdata = await Users.create({ ...req.body, password: hashpassoword })
+        const newdata = await Users.create({ ...req.body, password: hashpassoword, avtar: req.file.path })
         console.log("newdata", newdata);
 
         // , avtar: req.file.path 
@@ -151,14 +151,14 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: true,
             maxAge: 360000, // 1 hour
-            sameSite:"None"
+            sameSite: "None"
         }
 
         const optionRef = {
             httpOnly: true,
             secure: true,
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            sameSite:"None"
+            sameSite: "None"
         }
 
         res.status(200)
@@ -216,7 +216,7 @@ const newToken = async (req, res) => {
         const option = {
             httpOnly: true,
             secure: true,
-            sameSite:"None"
+            sameSite: "None"
         }
 
         res.status(200)
