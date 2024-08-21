@@ -73,6 +73,7 @@ router.get(
                 httpOnly: true,
                 secure: true,
                 maxAge: 360000, // 1 hour
+                sameSite: "None"
             }
 
             const optionRef = {
