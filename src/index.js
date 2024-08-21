@@ -40,7 +40,6 @@ app.use(cors({
     // origin: 'http://localhost:3000',
     credentials: true
 }));
-
 app.use(express.json())
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
