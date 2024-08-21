@@ -76,7 +76,6 @@ const addCategory = async (req, res) => {
         const category = await Categories.create(req.body);
         console.log(category);
 
-
         if (!category) {
             res.status(400).json({
                 success: false,
