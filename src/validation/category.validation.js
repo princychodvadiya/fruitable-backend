@@ -10,7 +10,7 @@ const creatCategory = {
     body: Joi.object().keys({
         name: Joi.string().required().max(30),
         description: Joi.string().required().max(300),
-        image: Joi.string()
+        image: Joi.string().allow('')
     })
 }
 

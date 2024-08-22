@@ -3,15 +3,15 @@ const Categories = require("../model/categories.model")
 const listCategories = async (req, res) => {
     console.log("cateee", req.query.page, req.query.pageSize);
     try {
-        // const page = parseInt(req.query.page)
-        // const pageSize = parseInt(req.query.pageSize)
+        const page = parseInt(req.query.page)
+        const pageSize = parseInt(req.query.pageSize)
 
-        // if (page <= 0 || pageSize <= 0) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Invalid page or page size"
-        //     })
-        // }
+        if (page <= 0 || pageSize <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid page or page size"
+            })
+        }
 
         const categories = await Categories.find();
 
@@ -22,28 +22,26 @@ const listCategories = async (req, res) => {
             })
         }
 
-        // let startIndex = 0, endIndex = 0, paginationData = []
+        let startIndex = 0, endIndex = 0, paginationData = [...categories]
 
-        // if (page > 0 && pageSize > 0) {
-        //     startIndex = (page - 1) * pageSize        //startIndex=(3-1)*3=3
-        //     endIndex = startIndex + pageSize             //endIndex=3+3=6
-        //     paginationData = categories.slice(startIndex, endIndex)
-        // }
-
-        // res.status(200).json({
-        //     success: true,
-        //     totalData: categories.length,
-        //     message: 'Categories fetch successfully.',
-        //     data: paginationData
-        // })
-
+        if (page > 0 && pageSize > 0) {
+            startIndex = (page - 1) * pageSize        //startIndex=(3-1)*3=3
+            endIndex = startIndex + pageSize             //endIndex=3+3=6
+            paginationData = categories.slice(startIndex, endIndex)
+        }
 
         res.status(200).json({
             success: true,
-            // totalData: categories.length,
+            totalData: categories.length,
             message: 'Categories fetch successfully.',
-            data: categories
+            data: paginationData
         })
+        // res.status(200).json({
+        //     success: true,
+        //     // totalData: categories.length,
+        //     message: 'Categories fetch successfully.',
+        //     data: categories
+        // })
     } catch (error) {
         res.status(500).json({
             success: false,

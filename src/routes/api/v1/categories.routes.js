@@ -3,7 +3,7 @@ const { controllerCategories } = require('../../../controller');
 const auth = require('../../../middleware/auth');
 const { creatCategory } = require('../../../validation/category.validation');
 const { categoryValidation } = require('../../../validation');
-const { validation } = require('../../../middleware/validation');
+const validation = require('../../../middleware/validation');
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get(
 
 router.get(
     '/list-categories',
-    // auth(["admin", "employe", "user"]),
+    auth(["admin", "employe", "user"]),
     controllerCategories.listCategories
 )
 
