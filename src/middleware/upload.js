@@ -4,9 +4,10 @@ const path = require('path')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // console.log(file.fieldname);
-        // const filename = path.join('public', file.fieldname)
-        const filepath = path.join('/temp', file.fieldname)
+        console.log(file.fieldname);
+        // const filepath = path.join('public', file.fieldname)
+        const filepath = path.join('/tmp', file.fieldname)
+        console.log("ok", filepath);
 
         fs.mkdir(filepath, { recursive: true }, (err) => {
             if (err) {
