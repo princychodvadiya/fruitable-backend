@@ -93,6 +93,7 @@ const searchProducts = async (req, res) => {
 
     }
 }
+
 const listProducts = async (req, res) => {
     try {
         const products = await Products.find();
@@ -144,18 +145,18 @@ const getProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
     console.log(req.body);
-    console.log(req.file);
+    console.log("bhcdb", req.file);
 
-    const fileRes = await uploadFile(req.file.path, "Product");
-    console.log(fileRes);
+    // const fileRes = await uploadFile(req.file.path, "Product");
+    // console.log(fileRes);
 
     try {
         const product = await Products.create({
             ...req.body,
-            product_image: {
-                public_id: fileRes.public_id,
-                url: fileRes.url
-            }
+            // product_image: {
+            //     public_id: fileRes.public_id,
+            //     url: fileRes.url
+            // }
         });
 
         if (!product) {
