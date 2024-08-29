@@ -6,8 +6,8 @@ info:
 servers:
   - url: http://localhost:8000/api/v1
     description: local server.
-  - url: http://.example.com
-    description: Optional server description, e.g. Internal staging server for testing
+  - url: https://fruitable-backend-akj1.vercel.app/api/docs
+    description: live server.
 components:
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
