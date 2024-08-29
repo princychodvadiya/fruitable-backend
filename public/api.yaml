@@ -419,3 +419,202 @@ paths:
                 type: array
                 items: 
                   type: string
+  /products/update-product/{product_id}:
+    put:
+      summary: update products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: Update products.
+      requestBody:
+        required: true
+        content:
+           multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: string
+                stock:
+                  type: string
+                product_image:
+                  type: string
+                  format: binary
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string
+  /products/delete-product/{product_id}:
+    delete:
+      summary: delete products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: delete products.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string
+
+  /variants/list-variants:
+    get:
+      summary: list variants.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /variants/add-variant:
+    post:
+      summary: Add variants.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      requestBody:
+        required: true
+        content:
+           multipart/form-data:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: string
+                subcategory_id:
+                  type: string
+                product_id:
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: string
+                stock:
+                  type: string
+                discount:
+                  type: string
+                variant_image:
+                  type: string
+                  format: binary
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /variants/update-variant/{variant_id}:
+    put:
+      summary: update variants.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      parameters:
+        - in: path
+          name: variant_id
+          schema:
+            type: string
+          required: true
+          description: Update variants.
+      requestBody:
+        required: true
+        content:
+           multipart/form-data:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: string
+                price:
+                  type: string
+                stock:
+                  type: string
+                discount:
+                  type: string
+                variant_image:
+                  type: string
+                  format: binary
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string
+  /variants/delete-variant/{variant_id}:
+    delete:
+      summary: delete variants.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      parameters:
+        - in: path
+          name: variant_id
+          schema:
+            type: string
+          required: true
+          description: delete variants.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                variant_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string
+
+  
