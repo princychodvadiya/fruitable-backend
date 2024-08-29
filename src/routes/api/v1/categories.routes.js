@@ -22,7 +22,7 @@ router.get(
 
 router.post(
     '/add-category',
-    validation(categoryValidation.creatCategory),
+    // validation(categoryValidation.creatCategory),
     controllerCategories.addCategory
 )
 

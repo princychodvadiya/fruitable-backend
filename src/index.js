@@ -12,6 +12,8 @@ const YAML = require('yamljs');
 const path = require('path');
 
 const app = express();
+app.use(express.json());
+
 googleLoginProvider();
 
 const _dirname = path.resolve();
@@ -36,11 +38,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cookieParser())
 app.use(cors({
-    origin: 'https://fruitable-frontend.vercel.app',
-    // origin: 'http://localhost:3000',
+    // origin: 'https://fruitable-frontend.vercel.app',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
-app.use(express.json())
+
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -55,8 +57,6 @@ app.use('/api/v1', routes);
 app.get('/', (req, res) => {
     res.send('Hello World')
 })
-
-
 
 app.listen(8000, () => {
     console.log("server start at port 8000.");

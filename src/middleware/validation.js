@@ -2,8 +2,8 @@ const Joi = require("joi");
 const pike = require("../helpers/pike");
 
 const validation = (schema) => (req, res, next) => {
-    console.log("okvfdh", req.body);
-    // console.log(Object.keys(schema));
+    console.log("okvfddfdddddddddddddddh",req.body);
+    // console.log(Object.keys(schema ));
 
     const object = pike(req, Object.keys(schema));
     console.log("ojvoi", object);
