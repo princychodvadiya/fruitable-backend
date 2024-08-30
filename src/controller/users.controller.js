@@ -335,6 +335,53 @@ const getUser = async (req, res) => {
     }
 }
 
+const ListUser = async (req, res) => {
+    const user = await Users.aggregate([
+        {
+            $match: {
+                isActive: true
+            }
+        },
+        {
+            $lookup: {
+                from: "orders",
+                localField: "_id",
+                foreignField: "user_id",
+                as: "userOrders"
+            }
+        },
+        {
+            $unwind: {
+                path: "$userOrders",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                email: 1,
+                "userOrders.orderId": 1,
+                "userOrders.orderDate": 1,
+                "userOrders.totalAmount": 1
+            }
+        },
+        {
+            $sort: {
+                "userOrders.orderDate": -1
+            }
+        },
+        {
+            $limit: 100
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: 'user fetch successfully.',
+        data: user
+    })
+
+}
 module.exports = {
     AccRefToken,
     register,
@@ -343,6 +390,7 @@ module.exports = {
     logout,
     registerOTP, verifyOTP,
     chackAuth,
-    getUser
+    getUser,
+    ListUser
 
 }

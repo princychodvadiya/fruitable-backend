@@ -30,6 +30,31 @@ router.delete(
     controllerVariants.deleteVariant
 )
 
+router.get(
+    '/count-stock/:variant_id',
+    controllerVariants.countstock
+)
+
+router.get(
+    '/active',
+    controllerVariants.activevarint
+)
+
+router.get(
+    '/count-products',
+    controllerVariants.countptoduct
+)
+
+router.get(
+    '/product/:product_id',
+    controllerVariants.variantparticularproduct
+)
+
+router.get(
+    '/list-variant/:product_id',
+    controllerVariants.Variantdetails
+)
+
 module.exports = router;
 
 

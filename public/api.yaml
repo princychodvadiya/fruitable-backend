@@ -152,6 +152,28 @@ paths:
                 type: array
                 items: 
                   type: string
+  /users/order/{user_id}:
+    get:
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: get users.
+      summary: get users.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - users
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
 
   /categories/list-categories:
     get:
@@ -1035,5 +1057,125 @@ paths:
                 type: array
                 items:  
                   type: string
-
-  
+  /variants/get-variant/{variant_id}:
+    get:
+      parameters:
+        - in: path
+          name: variant_id
+          schema:
+            type: string
+          required: true
+          description: get variants.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /variants/count-stock/{variant_id}:
+    get:
+      parameters:
+        - in: path
+          name: variant_id
+          schema:
+            type: string
+          required: true
+          description: get variants.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /variants/active:
+    get:
+      summary: total count of active variants.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - variants
+      responses:
+        '200':
+          description: The count of active variants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active variants.
+  /variants/count-products:
+    get:
+      summary: total count of active variants.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - variants
+      responses:
+        '200':
+          description: count-products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count-products      
+  /variants/product/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: get variants.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string        
+  /variants/list-variant/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: get variants.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - variants
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
