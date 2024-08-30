@@ -311,6 +311,30 @@ const chackAuth = async (req, res) => {
     }
 }
 
+const getUser = async (req, res) => {
+    try {
+        const user = await Users.findById(req.params.user_id)
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: 'user not found.'
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'user fetch successfully.',
+            data: user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            meassage: 'Internal Server Error.' + error.meassage
+        })
+    }
+}
+
 module.exports = {
     AccRefToken,
     register,
@@ -318,5 +342,7 @@ module.exports = {
     newToken,
     logout,
     registerOTP, verifyOTP,
-    chackAuth
+    chackAuth,
+    getUser
+
 }

@@ -130,6 +130,28 @@ paths:
                 type: array
                 items: 
                   type: string
+  /users/get-users/{user_id}:
+    get:
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: get users.
+      summary: get users.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - users
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
 
   /categories/list-categories:
     get:
@@ -852,6 +874,41 @@ paths:
             application/json:
               schema:
                 type: object
+  /products/out-of-stock:
+    get:
+      summary: recently added products.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - products
+      responses:
+        '200':
+          description: out-of-stock.
+          content:
+            application/json:
+              schema:
+                type: object
+  /products/variant-details/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: variant_details.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
 
   /variants/list-variants:
     get:

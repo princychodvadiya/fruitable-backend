@@ -357,14 +357,46 @@ const Countcategory = async (req, res) => {
     console.log(Countcategory);
 }
 
-// const outofstock = async () => {
-//     console.log("ok");
+const outofstock = async (req, res) => {
+    console.log("ok");
 
-//     const outofstock = await Products.aggregate(
-
-//     )
-//     console.log(outofstock);
-// }
+    const outofstock = await Products.aggregate([
+        {
+            "$match": {
+                "isActive": true
+            }
+        },
+        {
+            "$lookup": {
+                "from": "variants",
+                "localField": "_id",
+                "foreignField": "product_id",
+                "as": "variants"
+            }
+        },
+        {
+            "$match": {
+                "variants": { "$size": 0 }
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "name": 1,
+                "description": 1,
+                "price": 1,
+                "stock": 1
+            }
+        }
+    ]
+    )
+    res.status(200).json({
+        success: true,
+        message: 'product fetch successfully.',
+        data: outofstock
+    })
+    console.log(outofstock);
+}
 
 const productByCategory = async (req, res) => {
     console.log("ok");
@@ -473,6 +505,119 @@ const newArrivals = async (req, res) => {
     console.log(products);
 
 }
+
+const discounts = async (req, res) => {
+    const discounts = await Products.aggregate(
+        [
+            {
+                "$match": {
+                    "isActive": true
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "categories",
+                    "localField": "category_id",
+                    "foreignField": "_id",
+                    "as": "category"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "subcategories",
+                    "localField": "subcategory_id",
+                    "foreignField": "_id",
+                    "as": "subcategory"
+                }
+            },
+            {
+                "$unwind": "$category"
+            },
+            {
+                "$unwind": "$subcategory"
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "category_id": "$category_id",
+                        "subcategory_id": "$subcategory_id"
+                    },
+                    "category_name": { "$first": "$category.name" },
+                    "subcategory_name": { "$first": "$subcategory.name" },
+                    "products": {
+                        "$push": {
+                            "_id": "$_id",
+                            "name": "$name",
+                            "description": "$description",
+                            "price": "$price",
+                            "stock": "$stock"
+                        }
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "category_id": "$_id.category_id",
+                    "subcategory_id": "$_id.subcategory_id",
+                    "category_name": 1,
+                    "subcategory_name": 1,
+                    "products": 1
+                }
+            }
+        ]
+
+    )
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: discounts
+    })
+}
+
+const variantsDatils = async (req, res) => {
+    const variantsDatils = await Products.aggregate(
+        [
+            {
+                "$lookup": {
+                    "from": "variants",
+                    "localField": "_id",
+                    "foreignField": "product_id",
+                    "as": "variants"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$variants",
+                    "preserveNullAndEmptyArrays": true
+                }
+            },
+            {
+                "$project": {
+                    "_id": 1,
+                    "name": 1,
+                    "description": 1,
+                    "price": 1,
+                    "stock": 1,
+                    "variants": {
+                        "_id": "$variants._id",
+                        "variant_name": "$variants.name",
+                        "variant_price": "$variants.price",
+                        "variant_stock": "$variants.stock",
+                        "variant_details": "$variants.details"
+                    }
+                }
+            }
+        ]
+
+    )
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: variantsDatils
+    })
+}
+
 module.exports = {
     listProducts,
     getProduct,
@@ -480,10 +625,12 @@ module.exports = {
     deleteProduct,
     updateProduct,
     Countcategory,
-    // outofstock,
+    outofstock,
     productByCategory,
     getProductBySubcategory,
     searchProducts,
     topRate,
-    newArrivals
+    newArrivals,
+    discounts,
+    variantsDatils
 }

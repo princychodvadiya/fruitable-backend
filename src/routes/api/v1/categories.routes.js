@@ -64,4 +64,5 @@ router.get(
     controllerCategories.totalProduct
 )
 
+
 module.exports = router;    

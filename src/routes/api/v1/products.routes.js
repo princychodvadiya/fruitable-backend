@@ -40,10 +40,10 @@ router.get(
     controllerProducts.Countcategory
 )
 
-// router.get(
-//     '/out-of-stock',
-//     controllerProducts.outofstock
-// )
+router.get(
+    '/out-of-stock',
+    controllerProducts.outofstock
+)
 
 router.get(
     '/category/:category_id',
@@ -62,8 +62,15 @@ router.get(
     '/new-arrivals',
     controllerProducts.newArrivals
 )
-// router.get(
-//     '/',
-//     co
-// )
+
+router.get(
+    '/discounts',
+    controllerProducts.discounts
+)
+
+router.get(
+    '/variant-details/:product_id',
+    controllerProducts.variantsDatils
+)
+
 module.exports = router;

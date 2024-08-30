@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Categories = require("../model/categories.model")
 
 const listCategories = async (req, res) => {
@@ -255,37 +256,47 @@ const countsubcategories = async (req, res) => {
 }
 
 const subcategorioncategories = async (req, res) => {
-    const retviecategoryonsubcate = await Categories.aggregate([
-        {
-            $match: {
-                _id: "$_id"
-            }
-        },
-        {
-            $lookup: {
-                from: "subcategories",
-                localField: "_id",
-                foreignField: "category_id",
-                as: "subcategories"
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                category_name: "$name",
-                subcategories: "$subcategories"
-            }
-        }
+    const { category_id } = req.params;
 
-    ]);
-    res.status(200).json({
-        success: true,
-        message: "retviecategoryonsubcate get  succesfully",
-        data: retviecategoryonsubcate
-    })
+    try {
+        const retviecategoryonsubcate = await Categories.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(category_id)  // Match the category_id from the request
+                }
+            },
+            {
+                $lookup: {
+                    from: "subcategories",
+                    localField: "_id",
+                    foreignField: "category_id",
+                    as: "subcategories"
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    category_name: "$name",
+                    subcategories: "$subcategories"
+                }
+            }
+        ]);
 
-    console.log(retviecategoryonsubcate);
-}
+        res.status(200).json({
+            success: true,
+            message: "Subcategories retrieved successfully.",
+            data: retviecategoryonsubcate[0]  // Assuming you expect a single category
+        });
+
+        console.log(retviecategoryonsubcate);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while retrieving subcategories.",
+            error: error.message
+        });
+    }
+};
 
 const totalProduct = async (req, res) => {
     try {
@@ -294,7 +305,7 @@ const totalProduct = async (req, res) => {
                 $lookup: {
                     from: "products",
                     localField: "_id",
-                    foreignField: "categoriesid",
+                    foreignField: "category_id",
                     as: "Products"
                 }
             },
