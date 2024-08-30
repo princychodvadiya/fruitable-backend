@@ -28,7 +28,7 @@ router.delete(
 )
 
 router.get(
-    '/get-subcategoryBycategory/:category_id',
+    '/get-subcategoryBycategory/:subcategory_id',
     controllerSubcategories.getSubcategoryByCtegory
 )
 
@@ -40,6 +40,21 @@ router.get(
 router.get(
     '/inactive',
     controllerSubcategories.listOfSubcategory
+)
+
+router.get(
+    '/parent-of-subcategory/:category_id',
+    controllerSubcategories.subcategorioncategory
+)
+
+router.get(
+    '/most-products',
+    controllerSubcategories.highestcategori
+)
+
+router.get(
+    '/count-active',
+    controllerSubcategories.activesubcategory
 )
 
 module.exports = router;

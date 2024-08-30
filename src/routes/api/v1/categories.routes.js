@@ -8,7 +8,7 @@ const validation = require('../../../middleware/validation');
 const router = express.Router();
 
 router.get(
-    '/get-categories',                  //categoryValidation api
+    '/get-categories/:category_id',                  //categoryValidation api
     // '/get-categories/:category_id',    //get categoty api
     validation(categoryValidation.getCategory),
     controllerCategories.getCategory
@@ -45,6 +45,23 @@ router.get(
 router.get(
     '/getInactive',
     controllerCategories.countinActive
+)
+
+router.get(
+    '/most-products',
+    controllerCategories.highestnum
+)
+router.get(
+    '/count-subcategories',
+    controllerCategories.countsubcategories
+)
+router.get(
+    '/category-subcategory/:category_id',
+    controllerCategories.subcategorioncategories
+)
+router.get(
+    '/average-products',
+    controllerCategories.totalProduct
 )
 
 module.exports = router;    

@@ -46,7 +46,7 @@ router.get(
 // )
 
 router.get(
-    '/category',
+    '/category/:category_id',
     controllerProducts.productByCategory
 )
 
@@ -54,5 +54,16 @@ router.get(
     '/get-ProductBySubcategory/:subcategory_id',
     controllerProducts.getProductBySubcategory
 )
-
+router.get(
+    '/top-rated',
+    controllerProducts.topRate
+)
+router.get(
+    '/new-arrivals',
+    controllerProducts.newArrivals
+)
+// router.get(
+//     '/',
+//     co
+// )
 module.exports = router;

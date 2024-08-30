@@ -317,7 +317,8 @@ const getProductBySubcategory = async (req, res) => {
         })
     }
 }
-const Countcategory = async () => {
+
+const Countcategory = async (req, res) => {
     console.log("ok");
 
     const Countcategory = await Products.aggregate(
@@ -348,6 +349,11 @@ const Countcategory = async () => {
             }
         ]
     )
+    res.status(200).json({
+        success: true,
+        message: 'product fetch successfully.',
+        data: Countcategory
+    })
     console.log(Countcategory);
 }
 
@@ -360,7 +366,7 @@ const Countcategory = async () => {
 //     console.log(outofstock);
 // }
 
-const productByCategory = async () => {
+const productByCategory = async (req, res) => {
     console.log("ok");
     const productByCategory = await Products.aggregate(
         [
@@ -391,9 +397,82 @@ const productByCategory = async () => {
             }
         ]
     )
+    res.status(200).json({
+        success: true,
+        message: 'product fetch successfully.',
+        data: productByCategory
+    })
     console.log(productByCategory);
 }
 
+const topRate = async (req, res) => {
+
+    const products = await Products.aggregate([
+
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "product_id",
+                as: "review"
+            }
+        },
+        {
+            $unwind: {
+                path: "$review"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "product_name": { $first: "$name" },
+                "Totalrating": {
+                    $sum: "$review.rating"
+                }
+            }
+        },
+        {
+            $sort: {
+                "Totalrating": -1
+            }
+        },
+        {
+            $limit: 1
+        }
+
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+const newArrivals = async (req, res) => {
+
+    const products = await Products.aggregate([
+        {
+            $sort: {
+                "createdAt": -1
+            }
+        },
+        {
+            $limit: 3
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
 module.exports = {
     listProducts,
     getProduct,
@@ -404,5 +483,7 @@ module.exports = {
     // outofstock,
     productByCategory,
     getProductBySubcategory,
-    searchProducts
+    searchProducts,
+    topRate,
+    newArrivals
 }

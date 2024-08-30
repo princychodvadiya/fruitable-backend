@@ -149,7 +149,7 @@ const getSubcategoryByCtegory = async (req, res) => {
     }
 }
 
-const countProducts = async () => {
+const countProducts = async (req,res) => {
     console.log("ok");
 
     const subcategories = await Subcategories.aggregate(
@@ -179,31 +179,137 @@ const countProducts = async () => {
             }
         ]
     )
-    console.log(subcategories);
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
 }
 
-const listOfSubcategory = async () => {
+const listOfSubcategory = async (req, res) => {
     console.log("ok");
 
     const listInacive = await Subcategories.aggregate(
         [
             {
                 $match: {
-                    "isActive": false
+                    isActive: false
                 }
             },
             {
                 $project: {
                     _id: 1,
-                    "isActive": 1,
                     name: 1
                 }
             }
         ]
     )
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: listInacive
+    })
+
     console.log(listInacive);
 }
 
+const subcategorioncategory = async (req, res) => {
+    const subcategories = await Subcategories.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $project: {
+                "name": 1,
+                "category": 1
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
+
+    console.log(subcategories);
+
+}
+
+const highestcategori = async (req, res) => {
+    const subcategories = await Subcategories.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "subcategory_id",
+                as: "product"
+            }
+        },
+        {
+            $match: {
+                "product": { $ne: [] }
+            }
+        },
+        {
+            $unwind: {
+                path: "$product"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "subcategory_name": { $first: "$name" },
+                "CountProduct": {
+                    $sum: 1
+                },
+                "product_name": { $push: "$product.name" }
+            }
+        },
+        {
+            $sort: {
+                "CountProduct": -1
+            }
+        },
+        {
+            $limit: 5
+        }
+
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
+
+    console.log(subcategories);
+}
+
+const activesubcategory = async (req, res) => {
+
+    const activesubcategori = await Subcategories.aggregate([
+        {
+            $match: {
+                isActive: true
+            }
+        },
+        {
+            $count: 'isActivenumofsubcategory'
+        }
+
+    ]);
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: activesubcategori
+    })
+}
 module.exports = {
     listSubcategories,
     getSubcategory,
@@ -212,5 +318,8 @@ module.exports = {
     updateSubcategory,
     getSubcategoryByCtegory,
     countProducts,
-    listOfSubcategory
+    listOfSubcategory,
+    subcategorioncategory,
+    highestcategori,
+    activesubcategory
 }

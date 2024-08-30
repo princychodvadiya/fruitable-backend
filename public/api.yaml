@@ -247,6 +247,137 @@ paths:
                 type: array
                 items:  
                   type: string
+  /categories/getActive:
+    get:
+      summary: total count of active subcategories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /categories/getInactive:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: The count of inactive categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  match:
+                    type: integer
+                    description: The number of active categories.                
+  /categories/most-products:
+    get:
+      summary: categories with the highest number of products..
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: categories with the highest number of products.
+          content:
+            application/json:
+              schema:
+                type: object
+  /categories/count-subcategories :
+    get:
+      summary: total count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: total count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+  /categories/category-subcategory/{category_id}:
+    get:
+      summary: subcategory in a specific category.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: subcategory in a specific category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category_id:
+                    type: string
+                    description: The number of active categories.
+  /categories/get-categories/{category_id}:
+    get:
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+          required: true
+          description: get category.
+      summary: get category.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - categories
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /categories/average-products:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: average number of products per category.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
 
   /subcategories/list-subcategories:
     get:
@@ -355,6 +486,110 @@ paths:
                 type: array
                 items:  
                   type: string
+  /subcategories/get-subcategories/{subcategory_id}:
+    get:
+      parameters:
+        - in: path
+          name: subcategory_id
+          schema:
+            type: string
+          required: true
+          description: get subcategories.
+      summary: get subcategories.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - subcategories
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /subcategories/count-products:
+    get:
+      summary: count of products for each subcategory.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - subcategories
+      responses:
+        '200':
+          description: count of products for each subcategory.
+          content:
+            application/json:
+              schema:
+                type: object
+  /subcategories/parent-of-subcategory/{category_id}:
+    get:
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+          required: true
+          description: parent-of-subcategory
+      summary: parent-of-subcategory
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - subcategories
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /subcategories/most-products:
+    get:
+      summary: subcategories with the highest number of products.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - subcategories
+      responses:
+        '200':
+          description: subcategories with the highest number of products.
+          content:
+            application/json:
+              schema:
+                type: object
+  /subcategories/count-active:
+    get:
+      summary: total count of active subcategories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - subcategories
+      responses:
+        '200':
+          description: total count of active subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.  
+  /subcategories/inactive:
+    get:
+      summary:  list of inactive subcategories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - subcategories
+      responses:
+        '200':
+          description:  list of inactive subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  match:
+                    type: integer
+                    description: The number of active categories. 
 
   /products/list-product:
     get:
@@ -490,6 +725,133 @@ paths:
                 type: array
                 items:  
                   type: string
+  /products/get-product/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: get products.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /products/search/:name:
+    get:
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+          description: get subcategories.
+      summary: get subcategories.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /products/count-categories:
+    get:
+      summary: count of products for each category.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - products
+      responses:
+        '200':
+          description: count of products for each category.
+          content:
+            application/json:
+              schema:
+                type: object
+  /products/category/{category_id}:
+    get:
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+          required: true
+          description: category.
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /products/get-ProductBySubcategory/{subcategory_id}:
+    get:
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: subcategory_id
+          schema:
+            type: string
+          required: true
+          description: subcategory_id.
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /products/top-rated:
+    get:
+      summary: recently added products.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - products
+      responses:
+        '200':
+          description: recently added products.
+          content:
+            application/json:
+              schema:
+                type: object
+  /products/new-arrivals:
+    get:
+      summary: recently added products.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - products
+      responses:
+        '200':
+          description: recently added products.
+          content:
+            application/json:
+              schema:
+                type: object
 
   /variants/list-variants:
     get:
