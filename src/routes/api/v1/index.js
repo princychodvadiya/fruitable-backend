@@ -16,6 +16,6 @@ router.use('/products', productsRouter);
 router.use('/variants', variantsRouter);
 router.use('/salespeoples', salespeopleRouter);
 router.use('/users', usersRouter);
-router.use("/ratinges",ratinges)
+router.use("/reviews",ratinges)
 
 module.exports = router;

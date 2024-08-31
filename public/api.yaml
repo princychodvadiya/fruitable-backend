@@ -1006,7 +1006,7 @@ paths:
             schema:
               type: object
               properties:
-                price:
+                name:
                   type: string
                 price:
                   type: string
@@ -1231,4 +1231,153 @@ paths:
                     type: integer
                     description: products with more than one variant.                                               
   
-  
+  /reviews/list-rating:
+    get:
+      summary: list rating.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /reviews/create-review:
+    post:
+      summary: Add reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                user_id:
+                  type: string
+                rating:
+                  type: string
+                review:
+                  type: string
+                comment:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /reviews/delete-review/{reviews_id}:
+    delete:
+      summary: delete reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      parameters:
+        - in: path
+          name: reviews_id
+          schema:
+            type: string
+          required: true
+          description: delete reviews.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                reviews_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string                 
+  /reviews/update-review/{reviews_id}:
+    put:
+      summary: Update a review
+      description: Update the review based on the provided review ID and request body.
+      tags:
+        - reviews
+      parameters:
+        - in: path
+          name: reviews_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the review to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: string
+                review:
+                  type: string
+                comment:
+                  type: string
+      responses:
+        '200':
+          description: Review successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /reviews/count-products:
+    get:
+      summary: count of reviews for each product.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: count of reviews for each product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of reviews for each product.    
+  /reviews/top-rated-products:
+    get:
+      summary: count of reviews for each product.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: count of reviews for each product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of reviews for each product.                   
