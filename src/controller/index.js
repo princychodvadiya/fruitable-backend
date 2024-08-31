@@ -10,4 +10,6 @@ module.exports.controllerSalsepeople = require('./salespeople.controller')
 
 module.exports.controllerUsers = require('./users.controller')
 
+module.exports.Ratingesdata = require("./ratings.controller")
+
 

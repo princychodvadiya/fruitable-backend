@@ -8,13 +8,14 @@ const productsRouter = require('./products.routes');
 const variantsRouter = require('./variants.routes');
 const salespeopleRouter = require('./salespeople.routes');
 const usersRouter = require('./users.routes')
+const ratinges = require('./ratings.routes')
 
 router.use('/categories', categoriesRouter);
 router.use('/subcategories', subcategoriesRouter);
 router.use('/products', productsRouter);
 router.use('/variants', variantsRouter);
 router.use('/salespeoples', salespeopleRouter);
-router.use('/users', usersRouter)
-
+router.use('/users', usersRouter);
+router.use("/ratinges",ratinges)
 
 module.exports = router;

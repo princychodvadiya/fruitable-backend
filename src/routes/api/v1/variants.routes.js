@@ -55,6 +55,18 @@ router.get(
     controllerVariants.Variantdetails
 )
 
+router.get(
+    '/low-quantity',
+    controllerVariants.productslowstock
+)
+router.get(
+    '/high-price',
+    controllerVariants.productswithhighesprices
+)
+router.get(
+    '/multiple-variants',
+    controllerVariants.morethanonevariant
+)
 module.exports = router;
 
 

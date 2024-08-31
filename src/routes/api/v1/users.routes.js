@@ -7,6 +7,7 @@ const upload = require('../../../middleware/upload');
 const { AccRefToken } = require('../../../controller/users.controller');
 
 const router = express.Router();
+
 router.get(
     '/get-user/:user_id',
     controllerUsers.getUser

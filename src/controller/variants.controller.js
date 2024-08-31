@@ -194,31 +194,31 @@ const updateVariant = async (req, res) => {
 const countstock = async (req, res) => {
     const variants = await Variants.aggregate([
         {
-          $group: {
-            _id: "$product_id",
-            totalStock: { $sum: "$stock" }
-          }
+            $group: {
+                _id: "$product_id",
+                totalStock: { $sum: "$stock" }
+            }
         },
         {
-          $lookup: {
-            from: "products",
-            localField: "_id",
-            foreignField: "_id",
-            as: "productDetails"
-          }
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
         },
         {
-          $unwind: "$productDetails"
+            $unwind: "$productDetails"
         },
         {
-          $project: {
-            productId: "$_id",
-            totalStock: 1,
-            "productDetails.name": 1,
-            "productDetails.description": 1
-          }
+            $project: {
+                productId: "$_id",
+                totalStock: 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1
+            }
         }
-      ])
+    ])
     res.status(200).json({
         success: true,
         message: "variant get  succesfully",
@@ -261,15 +261,15 @@ const countptoduct = async (req, res) => {
     const variants = await Variants.aggregate([
         {
             $group: {
-                _id: "$product_id", 
+                _id: "$product_id",
                 countVariants: { $sum: 1 }
             }
         },
         {
             $project: {
-                _id: 0, 
+                _id: 0,
                 product_id: "$_id",
-                countVariants: 1 
+                countVariants: 1
             }
         }
     ])
@@ -284,15 +284,15 @@ const countptoduct = async (req, res) => {
 const variantparticularproduct = async (req, res) => {
     const variants = await Variants.aggregate([
         {
-          $lookup: {
-            from: "products",
-            localField: "product_id",
-            foreignField: "_id",
-            as: "productDetails"
-          }
+            $lookup: {
+                from: "products",
+                localField: "product_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
         },
         {
-          $unwind: "$productDetails"
+            $unwind: "$productDetails"
         },
         // {
         //     $match: {
@@ -300,29 +300,29 @@ const variantparticularproduct = async (req, res) => {
         //     }
         // },
         {
-          $project: {
-            _id: 1,
-            categori_id: 1,
-            subcategori_id: 1,
-            product_id: 1,
-            price: 1,
-            stock: 1,
-            discount: 1,
-            attributes: 1,
-            isActive: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            "productDetails._id": 1,
-            "productDetails.name": 1,
-            "productDetails.description": 1,
-            "productDetails.price": 1,
-            "productDetails.stock": 1,
-            "productDetails.isActive": 1,
-            "productDetails.createdAt": 1,
-            "productDetails.updatedAt": 1
-          }
+            $project: {
+                _id: 1,
+                categori_id: 1,
+                subcategori_id: 1,
+                product_id: 1,
+                price: 1,
+                stock: 1,
+                discount: 1,
+                attributes: 1,
+                isActive: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "productDetails._id": 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1,
+                "productDetails.price": 1,
+                "productDetails.stock": 1,
+                "productDetails.isActive": 1,
+                "productDetails.createdAt": 1,
+                "productDetails.updatedAt": 1
+            }
         }
-      ])
+    ])
     res.status(200).json({
         success: true,
         message: "variant get  succesfully",
@@ -334,49 +334,218 @@ const variantparticularproduct = async (req, res) => {
 
 const Variantdetails = async (req, res) => {
     const variants = await Variants.aggregate([
-      {
-        $lookup: {
-          from: "products",
-          localField: "product_id",
-          foreignField: "_id",
-          as: "productDetails"
+        {
+            $lookup: {
+                from: "products",
+                localField: "product_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
+        },
+        {
+            $unwind: "$productDetails"
+        },
+        {
+            $project: {
+                _id: 1,
+                categori_id: 1,
+                subcategori_id: 1,
+                product_id: 1,
+                price: 1,
+                stock: 1,
+                discount: 1,
+                attributes: 1,
+                isActive: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "productDetails._id": 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1,
+                "productDetails.price": 1,
+                "productDetails.stock": 1,
+                "productDetails.isActive": 1,
+                "productDetails.createdAt": 1,
+                "productDetails.updatedAt": 1
+            }
         }
-      },
-      {
-        $unwind: "$productDetails"
-      },
-      {
-        $project: {
-          _id: 1,
-          categori_id: 1,
-          subcategori_id: 1,
-          product_id: 1,
-          price: 1,
-          stock: 1,
-          discount: 1,
-          attributes: 1,
-          isActive: 1,
-          createdAt: 1,
-          updatedAt: 1,
-          "productDetails._id": 1,
-          "productDetails.name": 1,
-          "productDetails.description": 1,
-          "productDetails.price": 1,
-          "productDetails.stock": 1,
-          "productDetails.isActive": 1,
-          "productDetails.createdAt": 1,
-          "productDetails.updatedAt": 1
-        }
-      }
     ])
     res.status(200).json({
-      success: true,
-      message: "variant get  succesfully",
-      data: variants
+        success: true,
+        message: "variant get  succesfully",
+        data: variants
     })
-  
+
     console.log(variants);
-  }
+}
+
+const productslowstock = async (req, res) => {
+    const variants = await Variants.aggregate([
+        {
+            $match: {
+                stock: { $lt: 20 }
+            }
+        },
+        {
+            $group: {
+                _id: "$product_id",
+                totalStock: { $sum: "$stock" },
+                variants: {
+                    $push: {
+                        variant_id: "$_id",
+                        stock: "$stock",
+                        price: "$price",
+                        discount: "$discount",
+                        attributes: "$attributes"
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
+        },
+        {
+            $unwind: "$productDetails"
+        },
+
+        {
+            $project: {
+                _id: 0,
+                productId: "$_id",
+                totalStock: 1,
+                variants: 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1
+            }
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: "variant get  succesfully",
+        data: variants
+    })
+
+    console.log(variants);
+}
+
+const productswithhighesprices = async (req, res) => {
+    const variants = await Variants.aggregate([
+        {
+            $sort: {
+                price: -1
+            }
+        },
+        {
+            $group: {
+                _id: "$product_id",
+                highestPrice: { $max: "$price" },
+                variants: {
+                    $push: {
+                        variant_id: "$_id",
+                        price: "$price",
+                        stock: "$stock",
+                        discount: "$discount",
+                        attributes: "$attributes"
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
+        },
+        {
+            $unwind: "$productDetails"
+        },
+        {
+            $project: {
+                _id: 0,
+                productId: "$_id",
+                highestPrice: 1,
+                variants: 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1
+            }
+        },
+        {
+            $sort: {
+                highestPrice: -1
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "variant get  succesfully",
+        data: variants
+    })
+
+    console.log(variants);
+}
+
+
+const morethanonevariant = async (req, res) => {
+    const variants = await Variants.aggregate([
+        {
+            $group: {
+                _id: "$product_id",
+                variantCount: { $sum: 1 },
+                variants: {
+                    $push: {
+                        variant_id: "$_id",
+                        price: "$price",
+                        stock: "$stock",
+                        discount: "$discount",
+                        attributes: "$attributes"
+                    }
+                }
+            }
+        },
+        {
+            $match: {
+                variantCount: { $gt: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "productDetails"
+            }
+        },
+        {
+            $unwind: "$productDetails"
+        },
+        {
+            $project: {
+                _id: 0,
+                productId: "$_id",
+                variantCount: 1,
+                variants: 1,
+                "productDetails.name": 1,
+                "productDetails.description": 1
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "variant get  succesfully",
+        data: variants
+    })
+
+    console.log(variants);
+}
+
 
 module.exports = {
     getVariant,
@@ -388,177 +557,11 @@ module.exports = {
     activevarint,
     countptoduct,
     variantparticularproduct,
-    Variantdetails
+    Variantdetails,
+    productslowstock,
+    productswithhighesprices,
+    morethanonevariant
 }
 
 
 
-
-// const productslowstock = async (req, res) => {
-//     const variants = await Variants.aggregate([
-//       {
-//         $match: {
-//           stock: { $lt: 20 }
-//         }
-//       },
-//       {
-//         $group: {
-//           _id: "$product_id",
-//           totalStock: { $sum: "$stock" },
-//           variants: {
-//             $push: {
-//               variant_id: "$_id",
-//               stock: "$stock",
-//               price: "$price",
-//               discount: "$discount",
-//               attributes: "$attributes"
-//             }
-//           }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "products",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "productDetails"
-//         }
-//       },
-//       {
-//         $unwind: "$productDetails"
-//       },
-  
-//       {
-//         $project: {
-//           _id: 0,
-//           productId: "$_id",
-//           totalStock: 1,
-//           variants: 1,
-//           "productDetails.name": 1,
-//           "productDetails.description": 1
-//         }
-//       }
-//     ])
-//     res.status(200).json({
-//       success: true,
-//       message: "variant get  succesfully",
-//       data: variants
-//     })
-  
-//     console.log(variants);
-//   }
-  
-//   const productswithhighesprices = async (req, res) => {
-//     const variants = await Variants.aggregate([
-//       {
-//         $sort: {
-//           price: -1
-//         }
-//       },
-//       {
-//         $group: {
-//           _id: "$product_id",
-//           highestPrice: { $max: "$price" },
-//           variants: {
-//             $push: {
-//               variant_id: "$_id",
-//               price: "$price",
-//               stock: "$stock",
-//               discount: "$discount",
-//               attributes: "$attributes"
-//             }
-//           }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "products",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "productDetails"
-//         }
-//       },
-//       {
-//         $unwind: "$productDetails"
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           productId: "$_id",
-//           highestPrice: 1,
-//           variants: 1,
-//           "productDetails.name": 1,
-//           "productDetails.description": 1
-//         }
-//       },
-//       {
-//         $sort: {
-//           highestPrice: -1
-//         }
-//       }
-//     ])
-  
-//     res.status(200).json({
-//       success: true,
-//       message: "variant get  succesfully",
-//       data: variants
-//     })
-  
-//     console.log(variants);
-//   }
-  
-//   const morethanonevariant = async (req, res) => {
-//     const variants = await Variants.aggregate([
-//       {
-//         $group: {
-//           _id: "$product_id",
-//           variantCount: { $sum: 1 },
-//           variants: {
-//             $push: {
-//               variant_id: "$_id",
-//               price: "$price",
-//               stock: "$stock",
-//               discount: "$discount",
-//               attributes: "$attributes"
-//             }
-//           }
-//         }
-//       },
-//       {
-//         $match: {
-//           variantCount: { $gt: 1 }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "products",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "productDetails"
-//         }
-//       },
-//       {
-//         $unwind: "$productDetails"
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           productId: "$_id",
-//           variantCount: 1,
-//           variants: 1,
-//           "productDetails.name": 1,
-//           "productDetails.description": 1
-//         }
-//       }
-//     ])
-  
-//     res.status(200).json({
-//       success: true,
-//       message: "variant get  succesfully",
-//       data: variants
-//     })
-  
-//     console.log(variants);
-//   }
-  
-  

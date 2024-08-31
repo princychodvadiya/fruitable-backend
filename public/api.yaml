@@ -1179,3 +1179,56 @@ paths:
                 type: array
                 items: 
                   type: string
+  /variants/low-quantity:
+    get:
+      summary: total count of active variants.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - variants
+      responses:
+        '200':
+          description: The count of active variants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active variants.
+  /variants/high-price:
+    get:
+      summary: total count of active variants.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - variants
+      responses:
+        '200':
+          description: The count of active variants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active variants.     
+  /variants/multiple-variants:
+    get:
+      summary: total count of active variants.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - variants
+      responses:
+        '200':
+          description: products with more than one variant.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: products with more than one variant.                                               
+  
+  

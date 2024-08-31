@@ -382,6 +382,7 @@ const ListUser = async (req, res) => {
     })
 
 }
+
 module.exports = {
     AccRefToken,
     register,
