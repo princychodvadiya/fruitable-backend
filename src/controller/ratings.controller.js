@@ -1,5 +1,6 @@
+const mongoose = require("mongoose");
 const Ratinges = require("../model/ratings.model");
-
+const { ObjectId } = require('mongodb');
 const listRating = async (req, res) => {
     try {
         const Ratinge = await Ratinges.find()
@@ -99,7 +100,6 @@ const updateReview = async (req, res) => {
     }
 };
 
-
 const countProduct = async (req, res) => {
     const Ratinge = await Ratinges.aggregate(
         [
@@ -156,10 +156,245 @@ const topratedproducts = async (req, res) => {
         data: Ratinge
     })
 }
+
+const reviewofproduct = async (req, res) => {
+    const { product_id } = req.params;
+
+    try {
+        const reviews = await Ratinges.aggregate([
+            {
+                $match: {
+                    product_id: mongoose.Types.ObjectId(product_id)
+                }
+            }
+        ]);
+        res.status(200).json({
+            success: true,
+            message: 'Reviews fetched successfully.',
+            data: reviews
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching reviews.',
+            error: error.message
+        });
+    }
+}
+
+const Approvereview = async (req, res) => {
+    try {
+        const { reviews_id } = req.params; // Get the review ID from the request parameters
+
+        // Perform the update operation
+        const result = await Ratinges.updateOne(
+            { _id: mongoose.Types.ObjectId(reviews_id) }, // Filter by review ID
+            { $set: { isApproved: true } } // Update operation
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Review not found.',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Review approved successfully.',
+            data: result
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while approving the review.',
+            error: error.message
+        });
+    }
+};
+
+const Rejectreview = async (req, res) => {
+    try {
+        const userId = req.params.user_id;
+
+        const objectId = mongoose.Types.ObjectId(userId);
+
+        const reviews = await Ratinges.aggregate([
+            {
+                $match: {
+                    user_id: objectId,
+                    isApproved: false
+                }
+            },
+            {
+                $project: {
+                    _id: 1
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            message: 'Reviews fetched successfully.',
+            data: reviews
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching reviews.',
+            error: error.message
+        });
+    }
+}
+
+const userwithproductdata = async (req, res, userId) => {
+    // const reviews = await Ratinges.aggregate([
+    //     {
+    //         $match: {
+    //             user_id: mongoose.Types.ObjectId(userId)
+    //         }
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: 'products',
+    //             localField: 'product_id',
+    //             foreignField: '_id',
+    //             as: 'productDetails'
+    //         }
+    //     },
+    //     {
+    //         $unwind: {
+    //             path: '$productDetails',
+    //             preserveNullAndEmptyArrays: true
+    //         }
+    //     },
+    //     {
+    //         $project: {
+    //             user_id: 1,
+    //             rating: 1,
+    //             review: 1,
+    //             'productDetails._id': 1,
+    //             'productDetails.name': 1,
+    //             'productDetails.description': 1 // Include any other product fields as needed
+    //         }
+    //     }
+    // ])
+    // res.status(200).json({
+    //     success: true,
+    //     message: 'Ratinge topratedproducts successfully.',
+    //     data: reviews
+    // })
+}
+
+const NoReviews = async (req, res) => {
+    const reviews = await Ratinges.aggregate(
+        [
+            {
+                $lookup: {
+                    from: 'review',
+                    localField: '_id',
+                    foreignField: 'product_id',
+                    as: 'review'
+                }
+            },
+            {
+                $match: {
+                    review: { $size: 0 }
+                }
+            }
+        ]
+    )
+    res.status(200).json({
+        success: true,
+        message: 'Reviews fetched successfully.',
+        data: reviews
+    });
+}
+
+const submittedbyspecificuser = async (req, res) => {
+    try {
+        const userId = req.params.user_id;
+
+        // Convert user_id to ObjectId if necessary
+        const reviews = await Ratinges.aggregate([
+            {
+                $match: {
+                    user_id: mongoose.Types.ObjectId(userId) // Assuming user_id is an ObjectId in MongoDB
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            success: true,
+            message: 'Reviews fetched successfully.',
+            data: reviews
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching reviews.',
+            error: error.message
+        });
+    }
+};
+
+const includecomments = async (req, res) => {
+    const review = await Ratinges.aggregate(
+        [
+            {
+                "$match": {
+                    "comment": {
+                        "$exists": true,
+                        "$ne": ""
+                    }
+                }
+            }
+        ]
+    )
+    res.status(200).json({
+        success: true,
+        message: 'review fetch successfully.',
+        data: review
+    })
+}
+
+const getReview = async (req, res) => {
+
+    try {
+        const review = await Ratinges.findById(req.params.reviews_id)
+
+        if (!review) {
+            res.status(404).json({
+                success: false,
+                message: 'review not found.'
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'review fetch successfully.',
+            data: review
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error.' + error.message
+        })
+    }
+}
+
+
 module.exports = {
     listRating,
     addReview,
     deleteReview,
     updateReview, countProduct,
-    topratedproducts
+    topratedproducts,
+    reviewofproduct,
+    Approvereview,
+    Rejectreview,
+    userwithproductdata, NoReviews,
+    submittedbyspecificuser,
+    includecomments,
+    getReview
 }

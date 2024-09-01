@@ -335,7 +335,7 @@ const getUser = async (req, res) => {
     }
 }
 
-const ListUser = async (req, res) => {
+const orderofuser = async (req, res) => {
     const user = await Users.aggregate([
         {
             $match: {
@@ -380,9 +380,84 @@ const ListUser = async (req, res) => {
         message: 'user fetch successfully.',
         data: user
     })
-
 }
 
+const listUser = async (req, res) => {
+    try {
+        const user = await Users.find();
+        // console.log(variant);
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                meassage: 'user not found.'
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'user fetch successfully.',
+            data: user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            meassage: 'Internal Server Error.' + error.meassage
+        })
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        const user = await Users.findByIdAndUpdate(req.params.user_id, req.body, { new: true, runValidators: true });
+
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                message: 'user not updated.'
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: 'user updated successfully.',
+            data: user
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error.' + error.message
+        })
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        const user = await Users.findByIdAndDelete(req.params.user_id)
+
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                message: 'user not deleted.'
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'user deleted successfully.',
+            data: user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            meassage: 'Internal Server Error.' + error.message
+        })
+    }
+}
+
+const reviewofuser = async(req,res)=>{
+
+}
 module.exports = {
     AccRefToken,
     register,
@@ -392,6 +467,9 @@ module.exports = {
     registerOTP, verifyOTP,
     chackAuth,
     getUser,
-    ListUser
-
+    orderofuser,
+    listUser,
+    updateUser,
+    deleteUser,
+    reviewofuser
 }

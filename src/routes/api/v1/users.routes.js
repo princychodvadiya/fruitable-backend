@@ -114,8 +114,27 @@ router.get(
 
 router.get(
     '/order/:user_id',
-    controllerUsers.ListUser
+    controllerUsers.orderofuser
 )
+router.get(
+    '/list-user',
+    controllerUsers.listUser
+)
+
+router.put(
+    '/update-user/:user_id',
+    controllerUsers.updateUser
+)
+
+router.delete(
+    '/delete-user/:user_id',
+    controllerUsers.deleteUser
+)
+router.get(
+    '/review/:user_id',
+    controllerUsers.reviewofuser
+)
+
 module.exports = router;
 
 

@@ -24,6 +24,14 @@ const ratingsSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        isApproved: {
+            type: Boolean,
+            default: false
+        },
+        isRejected: {
+            type: Boolean,
+            default: false
+        },
         isActive: {
             type: Boolean,
             default: true,

@@ -174,7 +174,88 @@ paths:
                 type: array
                 items: 
                   type: string
-
+  /users/list-user:
+    get:
+      summary: list user.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - users
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /users/update-user/{user_id}:
+    put:
+      summary: update user.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: Update user.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                role:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string            
+  /users/delete-user/{user_id}:
+    delete:
+      summary: delete user.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: delete user.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+           
   /categories/list-categories:
     get:
       parameters:
@@ -1381,3 +1462,343 @@ paths:
                   count:
                     type: integer
                     description: count of reviews for each product.                   
+  /reviews/get-review/{reviews_id}:
+    get:
+      parameters:
+        - in: path
+          name: reviews_id
+          schema:
+            type: string
+          required: true
+          description: get reviews.
+      summary: get reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                  
+  /reviews/with-comments:
+    get:
+      summary: reviews that include comments.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string        
+  /reviews/user/{user_id}:
+    get:
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: ID of the user to fetch reviews for.
+      summary: Retrieve all reviews submitted by a specific user.
+      description: Retrieves all reviews submitted by a specific user based on their user_id.
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: A JSON array of review objects.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+  /reviews/no-reviews:
+    get:
+      summary: count of reviews for each product.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: count of reviews for each product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of reviews for each product.               
+  /reviews/product/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: ID of the user to fetch reviews for.
+      summary: Retrieve all reviews submitted by a specific user.
+      description: Retrieves all reviews submitted by a specific user based on their product_id.
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: A JSON array of review objects.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+  /reviews/approve/{reviews_id}:
+    get:
+      parameters:
+        - in: path
+          name: reviews_id
+          schema:
+            type: string
+          required: true
+          description: get reviews.
+      summary: get reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                   
+  /reviews/user-with-productdata/{user_id}:
+    get:
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: get reviews.
+      summary: get reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string   
+  /reviews/reject/{reviews_id}:
+    get:
+      parameters:
+        - in: path
+          name: reviews_id
+          schema:
+            type: string
+          required: true
+          description: get reviews.
+      summary: get reviews.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - reviews
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                       
+
+  /orders/get-order/{order_id}:
+    get:
+      parameters:
+        - in: path
+          name: order_id
+          schema:
+            type: string
+          required: true
+          description: get orders.
+      summary: get orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - orders
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string  
+  /orders/list-order:
+    get:
+      summary: list orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - orders
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string     
+  /orders/update-order/{order_id}:
+    put:
+      summary: Update a order
+      description: Update the review based on the provided review ID and request body.
+      tags:
+        - orders
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the order to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                payment_method:
+                  type: string
+                payment_status:
+                  type: string
+                total_price:
+                  type: string
+      responses:
+        '200':
+          description: Review successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string  
+  /orders/add-order:
+    post:
+      summary: Add order.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - orders
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                status:
+                  type: string
+                payment_method:
+                  type: string
+                payment_status:
+                  type: string
+                total_price:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string   
+
+  /payments/list-payment:
+    get:
+      summary: list payment.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                                                          
+  /payments/get-payment/{payment_id}:
+    get:
+      parameters:
+        - in: path
+          name: payment_id
+          schema:
+            type: string
+          required: true
+          description: get payments.
+      summary: get payments.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /payments/create-payment:
+    post:
+      summary: create-payment.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                

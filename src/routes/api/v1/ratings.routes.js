@@ -33,4 +33,41 @@ router.get(
     Ratingesdata.topratedproducts
 )
 
+router.get(
+    '/product/:product_id',
+    Ratingesdata.reviewofproduct
+)
+router.get(
+    '/approve/:reviews_id',
+    Ratingesdata.Approvereview
+)
+router.get(
+    '/reject/:reviews_id',
+    Ratingesdata.Rejectreview
+)
+
+router.get(
+    '/user-with-productdata/:user_id',
+    Ratingesdata.userwithproductdata
+)
+
+router.get(
+    '/no-reviews',
+    Ratingesdata.NoReviews
+)
+router.get(
+    '/user/:user_id',
+    Ratingesdata.submittedbyspecificuser
+)
+
+router.get(
+    '/with-comments',
+    Ratingesdata.includecomments
+)
+
+router.get(
+    '/get-review/:reviews_id',
+    Ratingesdata.getReview
+)
+
 module.exports = router

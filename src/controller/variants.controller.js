@@ -491,7 +491,6 @@ const productswithhighesprices = async (req, res) => {
     console.log(variants);
 }
 
-
 const morethanonevariant = async (req, res) => {
     const variants = await Variants.aggregate([
         {
