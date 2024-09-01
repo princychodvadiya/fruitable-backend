@@ -21,8 +21,6 @@ const cartsSchema = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             ref: "Users",
             required: true,
-
-            
         },
         items: [itemSchema],
         isActive: {

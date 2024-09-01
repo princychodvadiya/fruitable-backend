@@ -15,3 +15,5 @@ module.exports.Ratingesdata = require("./ratings.controller")
 module.exports.controllerOrder = require("./orders.controller")
 
 module.exports.controllePayments = require("./payments.controller")
+
+module.exports.controlleCarts = require("./carts.controller")

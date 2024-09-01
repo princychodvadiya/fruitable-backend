@@ -20,4 +20,10 @@ router.post(
     '/add-order',
     controllerOrder.addOrder
 )
+
+router.delete(
+    '/delete-order/:order_id',
+    controllerOrder.deleteorders
+)
+
 module.exports = router;

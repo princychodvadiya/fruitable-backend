@@ -255,7 +255,7 @@ paths:
                 type: array
                 items: 
                   type: string
-           
+  
   /categories/list-categories:
     get:
       parameters:
@@ -1736,6 +1736,37 @@ paths:
                 type: array
                 items: 
                   type: string   
+  /orders/delete-order/{order_id}:
+    delete:
+      summary: delete orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - orders
+      parameters:
+        - in: path
+          name: order_id
+          schema:
+            type: string
+          required: true
+          description: delete orders.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string       
 
   /payments/list-payment:
     get:
@@ -1801,4 +1832,140 @@ paths:
               schema: 
                 type: array
                 items: 
-                  type: string                
+                  type: string        
+  /payments/order/{order_id}:
+    get:
+      summary: Payment details of order
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
+      parameters:
+        - in: path
+          name: order_id
+          schema:
+            type: string
+          required: true
+          description: Payment details of order
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string                     
+  /payments/delete-payment/{payment_id}:
+    delete:
+      summary: delete payment.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
+      parameters:
+        - in: path
+          name: payment_id
+          schema:
+            type: string
+          required: true
+          description: delete payment.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                payment_id:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:  
+                  type: string                     
+  /payments/update-payment/{payment_id}:
+    put:
+      summary: Update a ordpaymentser
+      description: Update the review based on the provided review ID and request body.
+      tags:
+        - payments
+      parameters:
+        - in: path
+          name: payment_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payments to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Review successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string                     
+                   
+  /carts/update-cart/{cart_id}:
+    put:
+      summary: Update a carts
+      description: Update the review based on the provided review ID and request body.
+      tags:
+        - carts
+      parameters:
+        - in: path
+          name: cart_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the carts to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Review successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string                     
+                   

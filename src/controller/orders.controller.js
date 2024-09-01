@@ -1,6 +1,5 @@
 const Orders = require("../model/orders.model")
 
-
 const getOrder = async (req, res) => {
 
     try {
@@ -99,10 +98,32 @@ const addOrder = async(req,res)=>{
         })
     }
 }
+const deleteorders = async (req, res) => {
 
+    try {
+        const order = await Orders.findByIdAndDelete(req.params.order_id)
+
+        if (!order) {
+            res.status(404).json({
+                success: false,
+                message: 'order not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'order deleted successfully',
+            data: order
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal error' + error.message
+        })
+    }
+}
 module.exports = {
     getOrder,
     listOrder,
     updateOrder,
-    addOrder
+    addOrder,deleteorders
 }
