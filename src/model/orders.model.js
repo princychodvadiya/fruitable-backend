@@ -7,6 +7,16 @@ const ordersSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
+        payment_id: {
+            type: mongoose.Types.ObjectId,
+            ref: "Payments",
+            required: true,
+        },
+        variant_id: {
+            type: mongoose.Types.ObjectId,
+            ref: "Variants",
+            required: true,
+        },
         status: {
             type: String,
             required: true,

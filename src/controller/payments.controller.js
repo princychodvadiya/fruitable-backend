@@ -102,7 +102,6 @@ const Paymentdetailsorder = async (req, res) => {
                 }
             }
         ]
-
     )
     res.status(200).json({
         success: true,
@@ -159,6 +158,7 @@ const updatepayment = async (req, res) => {
         })
     }
 }
+
 module.exports = {
     listPayments,
     getPaymentsOrder,

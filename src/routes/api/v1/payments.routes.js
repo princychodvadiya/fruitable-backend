@@ -21,6 +21,7 @@ router.get(
     '/order/:order_id',
     controllePayments.Paymentdetailsorder
 )
+
 router.delete(
     '/delete-payment/:payment_id',
     controllePayments.deletepayment

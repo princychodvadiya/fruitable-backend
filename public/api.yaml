@@ -130,7 +130,7 @@ paths:
                 type: array
                 items: 
                   type: string
-  /users/get-users/{user_id}:
+  /users/get-user/{user_id}:
     get:
       parameters:
         - in: path
@@ -1719,6 +1719,10 @@ paths:
               properties:
                 user_id:
                   type: string
+                variant_id:
+                  type: string
+                payment_id:
+                  type: string
                 status:
                   type: string
                 payment_method:
@@ -1835,26 +1839,17 @@ paths:
                   type: string        
   /payments/order/{order_id}:
     get:
-      summary: Payment details of order
-      description: Optional extended description in CommonMark or HTML.
-      tags:
-        - payments
       parameters:
         - in: path
           name: order_id
           schema:
             type: string
           required: true
-          description: Payment details of order
-      requestBody:
-        required: true
-        content:
-           application/json:
-            schema:
-              type: object
-              properties:
-                order_id:
-                  type: string
+          description: get orders.
+      summary: get orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - payments
       responses:
         '200':    # status code
           description: A JSON array of user names
@@ -1862,7 +1857,7 @@ paths:
             application/json:
               schema: 
                 type: array
-                items:  
+                items: 
                   type: string                     
   /payments/delete-payment/{payment_id}:
     delete:
@@ -1931,20 +1926,102 @@ paths:
                     type: boolean
                   message:
                     type: string                     
-                   
-  /carts/update-cart/{cart_id}:
-    put:
-      summary: Update a carts
-      description: Update the review based on the provided review ID and request body.
-      tags:
-        - carts
+                           
+  /carts/get-cart/{cart_id}:
+    get:
       parameters:
         - in: path
           name: cart_id
+          schema:
+            type: string
+          required: true
+          description: get carts.
+      summary: get carts.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - carts
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string                   
+  /carts/update-cart/{cart_id}:
+    put:
+      summary: Update an existing cart
+      description: Update details of an existing cart by its ID.
+      tags:
+        - carts
+      parameters:
+        - name: cart_id
+          in: path
           required: true
           schema:
             type: string
-          description: The ID of the carts to update
+            format: objectid
+          description: The ID of the cart to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isActive:
+                  type: boolean
+                  description: Indicates whether the cart is active or not.
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                        format: objectid
+                        description: The ID of the product in the cart.
+                      quntity:
+                        type: number
+                        description: The quantity of the product.
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    format: objectid
+                    description: The ID of the updated cart.
+                  user_id:
+                    type: string
+                    format: objectid
+                    description: The ID of the user who owns the cart.
+                  isActive:
+                    type: boolean
+                    description: Indicates whether the cart is active or not.
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                          format: objectid
+                          description: The ID of the product in the cart.
+                        quntity:
+                          type: number
+                          description: The quantity of the product.  
+  /carts/add-to-cart:
+    post:
+      summary: Add a new cart
+      description: Add a new cart with essential details including items.
+      tags:
+        - carts
       requestBody:
         required: true
         content:
@@ -1954,18 +2031,54 @@ paths:
               properties:
                 user_id:
                   type: string
+                  format: objectid
+                  description: The ID of the user who owns the cart.
+                isActive:
+                  type: boolean
+                  description: Indicates whether the cart is active or not.
                 items:
-                  type: string
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                        format: objectid
+                        description: The ID of the product in the cart.
+                      quntity:
+                        type: number
+                        default: 1
+                        description: The quantity of the product.
       responses:
-        '200':
-          description: Review successfully updated
+        '201':
+          description: Created
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
+                  _id:
+                    type: string
+                    format: objectid
+                    description: The ID of the created cart.
+                  user_id:
+                    type: string
+                    format: objectid
+                    description: The ID of the user who owns the cart.
+                  isActive:
                     type: boolean
-                  message:
-                    type: string                     
-                   
+                    description: Indicates whether the cart is active or not.
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                          format: objectid
+                          description: The ID of the product in the cart.
+                        quntity:
+                          type: number
+                          default: 1
+                          description: The quantity of the product.
+      
