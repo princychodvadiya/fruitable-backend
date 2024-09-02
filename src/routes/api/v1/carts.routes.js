@@ -21,4 +21,8 @@ router.post(
     '/add-to-cart',
     controlleCarts.addCart
 )
+
+router.delete('/delete-cart/:cart_id/:product_id',
+    controlleCarts.deleteCartItem
+);
 module.exports = router;

@@ -72,10 +72,43 @@ const updatequantity = async (req, res) => {
     }
 }
 
-const deletecart = async (req, res) => {
+const deleteCartItem = async (req, res) => {
+    try {
+        const { cart_id, product_id } = req.params;
 
-}
+        const cart = await Carts.findById(cart_id);
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: 'Cart not found'
+            });
+        }
 
+      
+        const itemIndex = cart.items.findIndex(item => item.product_id.toString() === product_id);
+        if (itemIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found in cart'
+            });
+        }
+
+      
+        cart.items.splice(itemIndex, 1);
+        await cart.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Product removed from cart successfully',
+            data: cart
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error: ' + error.message
+        });
+    }
+};
 // const addCart = async (req, res) => {
 //     try {
 //         const cart = await Carts.create(req.body);
@@ -137,6 +170,6 @@ module.exports = {
     updatecart,
     getcartUser,
     updatequantity,
-    deletecart,
-    addCart
+    
+    addCart,deleteCartItem
 }
