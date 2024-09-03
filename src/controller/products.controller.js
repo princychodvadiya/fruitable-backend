@@ -483,6 +483,7 @@ const topRate = async (req, res) => {
     console.log(products);
 
 }
+
 const newArrivals = async (req, res) => {
 
     const products = await Products.aggregate([

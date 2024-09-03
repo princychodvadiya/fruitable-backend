@@ -4,10 +4,9 @@ const upload = require('../../../middleware/upload');
 
 const router = express.Router();
 
-router.get(
-    '/search',
+router.get('/search-productes',
     controllerProducts.searchProducts
-)
+);
 router.get(
     '/get-product/:product_id',
     controllerProducts.getProduct

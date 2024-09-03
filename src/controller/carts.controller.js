@@ -84,7 +84,7 @@ const deleteCartItem = async (req, res) => {
             });
         }
 
-      
+
         const itemIndex = cart.items.findIndex(item => item.product_id.toString() === product_id);
         if (itemIndex === -1) {
             return res.status(404).json({
@@ -93,7 +93,7 @@ const deleteCartItem = async (req, res) => {
             });
         }
 
-      
+
         cart.items.splice(itemIndex, 1);
         await cart.save();
 
@@ -109,6 +109,7 @@ const deleteCartItem = async (req, res) => {
         });
     }
 };
+
 // const addCart = async (req, res) => {
 //     try {
 //         const cart = await Carts.create(req.body);
@@ -170,6 +171,5 @@ module.exports = {
     updatecart,
     getcartUser,
     updatequantity,
-    
-    addCart,deleteCartItem
+    addCart, deleteCartItem
 }
