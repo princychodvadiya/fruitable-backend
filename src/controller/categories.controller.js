@@ -302,25 +302,15 @@ const totalProduct = async (req, res) => {
     try {
         const count = await Categories.aggregate([
             {
-                $lookup: {
-                    from: "products",
-                    localField: "_id",
-                    foreignField: "category_id",
-                    as: "Products"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$Products"
+                $group: {
+                    _id: "$category_id",
+                    productCount: { $sum: 1 }
                 }
             },
             {
                 $group: {
-                    _id: "$_id",
-                    category_name: { $first: "$name" },
-                    totalProduct: {
-                        $sum: 1
-                    }
+                    _id: "null",
+                    averageCount: { $avg: "$productCount" }
                 }
             }
         ]);

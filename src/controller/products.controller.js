@@ -362,11 +362,6 @@ const outofstock = async (req, res) => {
 
     const outofstock = await Products.aggregate([
         {
-            "$match": {
-                "isActive": true
-            }
-        },
-        {
             "$lookup": {
                 "from": "variants",
                 "localField": "_id",
@@ -376,7 +371,8 @@ const outofstock = async (req, res) => {
         },
         {
             "$match": {
-                "variants": { "$size": 0 }
+                "variants": { "$size": 0 },
+                "stock": 0
             }
         },
         {
@@ -389,6 +385,7 @@ const outofstock = async (req, res) => {
             }
         }
     ]
+    
     )
     res.status(200).json({
         success: true,
@@ -580,36 +577,41 @@ const variantsDatils = async (req, res) => {
     const variantsDatils = await Products.aggregate(
         [
             {
-                "$lookup": {
-                    "from": "variants",
-                    "localField": "_id",
-                    "foreignField": "product_id",
-                    "as": "variants"
-                }
+              $match: {
+                _id: ObjectId("66704274d11211519b0d6b68")
+              }
             },
             {
-                "$unwind": {
-                    "path": "$variants",
-                    "preserveNullAndEmptyArrays": true
-                }
+              $lookup: {
+                from: "variants",
+                localField: "_id",
+                foreignField: "product_id",
+                as: "variants"
+              }
             },
             {
-                "$project": {
-                    "_id": 1,
-                    "name": 1,
-                    "description": 1,
-                    "price": 1,
-                    "stock": 1,
-                    "variants": {
-                        "_id": "$variants._id",
-                        "variant_name": "$variants.name",
-                        "variant_price": "$variants.price",
-                        "variant_stock": "$variants.stock",
-                        "variant_details": "$variants.details"
-                    }
+              $unwind: {
+                path: "$variants"
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                description: 1,
+                price: 1,
+                stock: 1,
+                variants: {
+                  _id: "$variants._id",
+                  variant_name: "$variants.name",
+                  variant_price: "$variants.price",
+                  variant_stock: "$variants.stock",
+                  variant_details: "$variants.details"
                 }
+              }
             }
-        ]
+          ]
+          
 
     )
     res.status(200).json({

@@ -149,7 +149,7 @@ const getSubcategoryByCtegory = async (req, res) => {
     }
 }
 
-const countProducts = async (req,res) => {
+const countProducts = async (req, res) => {
     console.log("ok");
 
     const subcategories = await Subcategories.aggregate(
