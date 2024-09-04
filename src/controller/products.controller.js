@@ -437,39 +437,47 @@ const productByCategory = async (req, res) => {
 const topRate = async (req, res) => {
 
     const products = await Products.aggregate([
-
         {
-            $lookup: {
-                from: "reviews",
-                localField: "_id",
-                foreignField: "product_id",
-                as: "review"
-            }
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "product_id",
+            as: "review"
+          }
         },
         {
-            $unwind: {
-                path: "$review"
-            }
+          $unwind: {
+            path: "$review"
+          }
         },
         {
-            $group: {
-                _id: "$_id",
-                "product_name": { $first: "$name" },
-                "Totalrating": {
-                    $sum: "$review.rating"
-                }
+          $group: {
+            _id: "$_id",
+            product_name: { $first: "$name" },
+            Totalrating: {
+              $sum: "$review.rating"
+            },
+            totalperson: {
+              $sum: 1
             }
+          }
         },
         {
-            $sort: {
-                "Totalrating": -1
+          $addFields: {
+            avgbyrate: {
+              $divide: ["$Totalrating", "$totalperson"]
             }
+          }
         },
         {
-            $limit: 1
+          $sort: {
+            avgbyrate: -1
+          }
+        },
+        {
+          $limit: 1
         }
-
-    ])
+      ])
 
     res.status(200).json({
         success: true,
@@ -508,62 +516,64 @@ const discounts = async (req, res) => {
     const discounts = await Products.aggregate(
         [
             {
-                "$match": {
-                    "isActive": true
+              $match: {
+                isActive: true
+              }
+            },
+            {
+              $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+              }
+            },
+            {
+              $lookup: {
+                from: "subcategories",
+                localField: "subcategory_id",
+                foreignField: "_id",
+                as: "subcategory"
+              }
+            },
+            {
+              $unwind: "$category"
+            },
+            {
+              $unwind: "$subcategory"
+            },
+            {
+              $group: {
+                _id: {
+                  category_id: "$category_id",
+                  subcategory_id: "$subcategory_id"
+                },
+                category_name: { $first: "$category.name" },
+                subcategory_name: {
+                  $first: "$subcategory.name"
+                },
+                products: {
+                  $push: {
+                    _id: "$_id",
+                    name: "$name",
+                    description: "$description",
+                    price: "$price",
+                    stock: "$stock"
+                  }
                 }
+              }
             },
             {
-                "$lookup": {
-                    "from": "categories",
-                    "localField": "category_id",
-                    "foreignField": "_id",
-                    "as": "category"
-                }
-            },
-            {
-                "$lookup": {
-                    "from": "subcategories",
-                    "localField": "subcategory_id",
-                    "foreignField": "_id",
-                    "as": "subcategory"
-                }
-            },
-            {
-                "$unwind": "$category"
-            },
-            {
-                "$unwind": "$subcategory"
-            },
-            {
-                "$group": {
-                    "_id": {
-                        "category_id": "$category_id",
-                        "subcategory_id": "$subcategory_id"
-                    },
-                    "category_name": { "$first": "$category.name" },
-                    "subcategory_name": { "$first": "$subcategory.name" },
-                    "products": {
-                        "$push": {
-                            "_id": "$_id",
-                            "name": "$name",
-                            "description": "$description",
-                            "price": "$price",
-                            "stock": "$stock"
-                        }
-                    }
-                }
-            },
-            {
-                "$project": {
-                    "_id": 0,
-                    "category_id": "$_id.category_id",
-                    "subcategory_id": "$_id.subcategory_id",
-                    "category_name": 1,
-                    "subcategory_name": 1,
-                    "products": 1
-                }
+              $project: {
+                _id: 0,
+                category_id: "$_id.category_id",
+                subcategory_id: "$_id.subcategory_id",
+                category_name: 1,
+                subcategory_name: 1,
+                products: 1
+              }
             }
-        ]
+          ]
 
     )
     res.status(200).json({
@@ -576,11 +586,11 @@ const discounts = async (req, res) => {
 const variantsDatils = async (req, res) => {
     const variantsDatils = await Products.aggregate(
         [
-            {
-              $match: {
-                _id: ObjectId("66704274d11211519b0d6b68")
-              }
-            },
+            // {
+            //   $match: {
+            //     _id: ObjectId("66704274d11211519b0d6b68")
+            //   }
+            // },
             {
               $lookup: {
                 from: "variants",

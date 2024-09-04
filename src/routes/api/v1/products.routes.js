@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/search-productes',
     controllerProducts.searchProducts
 );
+
 router.get(
     '/get-product/:product_id',
     controllerProducts.getProduct

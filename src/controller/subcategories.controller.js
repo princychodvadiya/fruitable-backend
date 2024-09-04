@@ -310,6 +310,8 @@ const activesubcategory = async (req, res) => {
         data: activesubcategori
     })
 }
+
+
 module.exports = {
     listSubcategories,
     getSubcategory,
