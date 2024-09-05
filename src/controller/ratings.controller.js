@@ -169,12 +169,20 @@ const reviewofproduct = async (req, res) => {
 
 const Approvereview = async (req, res) => {
     try {
-        const { reviews_id } = req.params; // Get the review ID from the request parameters
+        const { reviews_id, status } = req.params; 
 
-        // Perform the update operation
+        const isApproved = status === 'approve' ? true : status === 'disapprove' ? false : null;
+
+        if (isApproved === null) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status. Use "approve" or "disapprove".'
+            });
+        }
+
         const result = await Ratinges.updateOne(
-            { _id: mongoose.Types.ObjectId(reviews_id) }, // Filter by review ID
-            { $set: { isApproved: true } } // Update operation
+            { _id: new mongoose.Types.ObjectId(reviews_id) }, 
+            { $set: { isApproved: isApproved } } 
         );
 
         if (result.matchedCount === 0) {
@@ -186,13 +194,13 @@ const Approvereview = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Review approved successfully.',
+            message: "Review successfully",
             data: result
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'An error occurred while approving the review.',
+            message: 'An error occurred while updating the review status.',
             error: error.message
         });
     }
