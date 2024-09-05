@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose")
 const Variants = require("../model/variants.model")
 const uploadFile = require("../utils/cloudinary")
 
@@ -192,7 +193,13 @@ const updateVariant = async (req, res) => {
 };
 
 const countstock = async (req, res) => {
+    const { product_id } = req.params;
     const variants = await Variants.aggregate([
+        {
+            $match: {
+                product_id: new mongoose.Types.ObjectId(product_id)
+            }
+        },
         {
             $group: {
                 _id: "$product_id",
@@ -227,6 +234,7 @@ const countstock = async (req, res) => {
 
     console.log(variants);
 }
+
 const activevarint = async (req, res) => {
     const variants = await Variants.aggregate([
         {
@@ -333,7 +341,13 @@ const variantparticularproduct = async (req, res) => {
 }
 
 const Variantdetails = async (req, res) => {
+    const { product_id } = req.params;
     const variants = await Variants.aggregate([
+        {
+            $match: {
+                product_id: new mongoose.Types.ObjectId(product_id)
+            }
+        },
         {
             $lookup: {
                 from: "products",
@@ -371,10 +385,9 @@ const Variantdetails = async (req, res) => {
     ])
     res.status(200).json({
         success: true,
-        message: "variant get  succesfully",
-        data: variants
+        data: variants,
+        message: "variant get  succesfully"
     })
-
     console.log(variants);
 }
 

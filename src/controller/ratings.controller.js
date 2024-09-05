@@ -127,26 +127,11 @@ const topratedproducts = async (req, res) => {
     const Ratinge = await Ratinges.aggregate(
         [
             {
-                $lookup: {
-                    from: "products",
-                    localField: "product_id",
-                    foreignField: "_id",
-                    as: "product_details"
-                }
-            },
-            {
-                $unwind: "$product_details"
-            },
-            {
-                $group: {
-                    _id: "$product_id",
-                    product_name: { $first: "$product_details.name" },
-                }
-            },
-            {
                 $sort: {
-                    average_rating: -1
+                    "totalratinges": -1
                 }
+            }, {
+                $limit: 1
             }
         ]
     )
@@ -247,43 +232,44 @@ const Rejectreview = async (req, res) => {
     }
 }
 
-const userwithproductdata = async (req, res, userId) => {
-    // const reviews = await Ratinges.aggregate([
-    //     {
-    //         $match: {
-    //             user_id: mongoose.Types.ObjectId(userId)
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: 'products',
-    //             localField: 'product_id',
-    //             foreignField: '_id',
-    //             as: 'productDetails'
-    //         }
-    //     },
-    //     {
-    //         $unwind: {
-    //             path: '$productDetails',
-    //             preserveNullAndEmptyArrays: true
-    //         }
-    //     },
-    //     {
-    //         $project: {
-    //             user_id: 1,
-    //             rating: 1,
-    //             review: 1,
-    //             'productDetails._id': 1,
-    //             'productDetails.name': 1,
-    //             'productDetails.description': 1 // Include any other product fields as needed
-    //         }
-    //     }
-    // ])
-    // res.status(200).json({
-    //     success: true,
-    //     message: 'Ratinge topratedproducts successfully.',
-    //     data: reviews
-    // })
+const userwithproductdata = async (req, res) => {
+    const { user_id } = req.params;
+    const reviews = await Ratinges.aggregate([
+        {
+            $match: {
+                user_id: new mongoose.Types.ObjectId(user_id)
+            }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'product_id',
+                foreignField: '_id',
+                as: 'productDetails'
+            }
+        },
+        {
+            $unwind: {
+                path: '$productDetails',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                user_id: 1,
+                rating: 1,
+                review: 1,
+                'productDetails._id': 1,
+                'productDetails.name': 1,
+                'productDetails.description': 1 // Include any other product fields as needed
+            }
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: 'Ratinge topratedproducts successfully.',
+        data: reviews
+    })
 }
 
 const NoReviews = async (req, res) => {

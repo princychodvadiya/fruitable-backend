@@ -1229,16 +1229,16 @@ paths:
                 type: array
                 items: 
                   type: string
-  /variants/count-stock/{variant_id}:
+  /variants/count-stock/{product_id}:
     get:
       parameters:
         - in: path
-          name: variant_id
+          name: product_id
           schema:
             type: string
           required: true
-          description: get variants.
-      summary: get products.
+          description: product_id
+      summary: count-stock
       description: Optional extended description in CommonMark or HTML.
       tags:
         - variants
@@ -1284,29 +1284,7 @@ paths:
                 properties:
                   count:
                     type: integer
-                    description: count-products      
-  /variants/product/{product_id}:
-    get:
-      parameters:
-        - in: path
-          name: product_id
-          schema:
-            type: string
-          required: true
-          description: get variants.
-      summary: get products.
-      description: Optional extended description in CommonMark or HTML.
-      tags:
-        - variants
-      responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string        
+                    description: count-products             
   /variants/list-variant/{product_id}:
     get:
       parameters:
@@ -1651,50 +1629,50 @@ paths:
                 type: array
                 items: 
                   type: string                   
-  /reviews/user-with-productdata/{user_id}:
-    get:
-      parameters:
-        - in: path
-          name: user_id
-          schema:
-            type: string
-          required: true
-          description: get reviews.
-      summary: get reviews.
-      description: Optional extended description in CommonMark or HTML.
-      tags:
-        - reviews
-      responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string   
-  /reviews/reject/{reviews_id}:
-    get:
-      parameters:
-        - in: path
-          name: reviews_id
-          schema:
-            type: string
-          required: true
-          description: get reviews.
-      summary: get reviews.
-      description: Optional extended description in CommonMark or HTML.
-      tags:
-        - reviews
-      responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string                       
+  # /reviews/user-with-productdata/{user_id}:
+  #   get:
+  #     parameters:
+  #       - in: path
+  #         name: user_id
+  #         schema:
+  #           type: string
+  #         required: true
+  #         description: get reviews.
+  #     summary: get reviews.
+  #     description: Optional extended description in CommonMark or HTML.
+  #     tags:
+  #       - reviews
+  #     responses:
+  #       '200':    # status code
+  #         description: A JSON array of user names
+  #         content:
+  #           application/json:
+  #             schema: 
+  #               type: array
+  #               items: 
+  #                 type: string   
+  # /reviews/reject/{reviews_id}:
+  #   get:
+  #     parameters:
+  #       - in: path
+  #         name: reviews_id
+  #         schema:
+  #           type: string
+  #         required: true
+  #         description: get reviews.
+  #     summary: get reviews.
+  #     description: Optional extended description in CommonMark or HTML.
+  #     tags:
+  #       - reviews
+  #     responses:
+  #       '200':    # status code
+  #         description: A JSON array of user names
+  #         content:
+  #           application/json:
+  #             schema: 
+  #               type: array
+  #               items: 
+  #                 type: string                       
 
   /orders/get-order/{order_id}:
     get:

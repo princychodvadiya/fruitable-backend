@@ -19,6 +19,7 @@ router.post(
     upload.single('variant_image'),
     controllerVariants.addVariant
 )
+
 router.put(
     '/update-variant/:variant_id',
     upload.single('variant_image'),
@@ -31,7 +32,7 @@ router.delete(
 )
 
 router.get(
-    '/count-stock/:variant_id',
+    '/count-stock/:product_id',
     controllerVariants.countstock
 )
 
@@ -59,14 +60,17 @@ router.get(
     '/low-quantity',
     controllerVariants.productslowstock
 )
+
 router.get(
     '/high-price',
     controllerVariants.productswithhighesprices
 )
+
 router.get(
     '/multiple-variants',
     controllerVariants.morethanonevariant
 )
+
 module.exports = router;
 
 
