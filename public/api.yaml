@@ -1546,28 +1546,28 @@ paths:
                 type: array
                 items: 
                   type: string        
-  /reviews/user/{user_id}:
-    get:
-      parameters:
-        - in: path
-          name: user_id
-          schema:
-            type: string
-          required: true
-          description: ID of the user to fetch reviews for.
-      summary: Retrieve all reviews submitted by a specific user.
-      description: Retrieves all reviews submitted by a specific user based on their user_id.
-      tags:
-        - reviews
-      responses:
-        '200':
-          description: A JSON array of review objects.
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: object
+  # /reviews/user/{user_id}:
+  #   get:
+  #     parameters:
+  #       - in: path
+  #         name: user_id
+  #         schema:
+  #           type: string
+  #         required: true
+  #         description: ID of the user to fetch reviews for.
+  #     summary: Retrieve all reviews submitted by a specific user.
+  #     description: Retrieves all reviews submitted by a specific user based on their user_id.
+  #     tags:
+  #       - reviews
+  #     responses:
+  #       '200':
+  #         description: A JSON array of review objects.
+  #         content:
+  #           application/json:
+  #             schema: 
+  #               type: array
+  #               items: 
+  #                 type: object
   /reviews/no-reviews:
     get:
       summary: count of reviews for each product.
@@ -1748,14 +1748,24 @@ paths:
             schema:
               type: object
               properties:
-                status:
-                  type: string
-                payment_method:
-                  type: string
-                payment_status:
-                  type: string
                 total_price:
                   type: string
+                status:
+                  type: string
+                item:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                      quantity:
+                        type: integer
+                        default: 1
+                shipping_address:
+                    type: string
+                discount:
+                  type: number
       responses:
         '200':
           description: Review successfully updated
@@ -1770,40 +1780,50 @@ paths:
                     type: string  
   /orders/add-order:
     post:
-      summary: Add order.
+      summary: Add orders.
       description: Optional extended description in CommonMark or HTML.
       tags:
         - orders
       requestBody:
         required: true
         content:
-           application/json:
+          application/json:
             schema:
               type: object
               properties:
                 user_id:
                   type: string
-                variant_id:
+                seller_id:
                   type: string
                 payment_id:
                   type: string
-                status:
-                  type: string
-                payment_method:
-                  type: string
-                payment_status:
-                  type: string
                 total_price:
                   type: string
+                status:
+                  type: string
+                item:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                      quantity:
+                        type: integer
+                        default: 1
+                shipping_address:
+                    type: string
+                discount:
+                  type: number
       responses:
-        '200':    # status code
+        '200':
           description: A JSON array of user names
           content:
             application/json:
               schema: 
                 type: array
                 items: 
-                  type: string   
+                  type: string
   /orders/delete-order/{order_id}:
     delete:
       summary: delete orders.
@@ -1835,7 +1855,97 @@ paths:
                 type: array
                 items:  
                   type: string       
-
+  /orders/user/{user_id}:
+    get:
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: ID of the user whose orders are to be fetched.
+      summary: Get all orders for a specific user.
+      description: Retrieves all orders associated with a given user ID.
+      tags:
+        - orders
+      responses:
+        '200':
+          description: A list of orders for the specified user.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order_id:
+                          type: string
+                        product_id:
+                          type: string
+                        quntity:
+                          type: integer
+                        status:
+                          type: string
+  /orders/cancel:
+    get:
+      summary: cancel orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - orders
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /orders/seller/{seller_id}:
+    get:
+      parameters:
+        - in: path
+          name: seller_id
+          schema:
+            type: string
+          required: true
+          description: ID of the user whose orders are to be fetched.
+      summary: Get all orders for a specific user.
+      description: Retrieves all orders associated with a given user ID.
+      tags:
+        - orders
+      responses:
+        '200':
+          description: A list of orders for the specified user.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order_id:
+                          type: string
+                        product_id:
+                          type: string
+                        quntity:
+                          type: integer
+                        status:
+                          type: string
   /payments/list-payment:
     get:
       summary: list payment.

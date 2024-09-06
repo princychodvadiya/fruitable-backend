@@ -72,7 +72,7 @@ const updateOrder = async (req, res) => {
     }
 }
 
-const addOrder = async(req,res)=>{
+const addOrder = async (req, res) => {
     try {
         const order = await Orders.create(req.body);
 
@@ -82,15 +82,11 @@ const addOrder = async(req,res)=>{
                 message: 'order not created.'
             })
         }
-
         res.status(201).json({
             success: true,
             message: 'order created successfully.',
             data: order
         })
-
-
-
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -98,6 +94,7 @@ const addOrder = async(req,res)=>{
         })
     }
 }
+
 const deleteorders = async (req, res) => {
 
     try {
@@ -121,9 +118,81 @@ const deleteorders = async (req, res) => {
         })
     }
 }
+
+const listorderofuser = async (req, res) => {
+    try {
+        const orders = await Orders.find({ user_id: req.params.user_id });
+        console.log(orders);
+
+        if (!orders || orders.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No orders found for this user.'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Orders found successfully',
+            data: orders
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal error: ' + error.message
+        });
+    }
+}
+
+const Cancelorder = async (req, res) => {
+    const cancelorders = await Orders.aggregate([
+        {
+            $match: { status: "cancel" }
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: 'cancelorders successfully.',
+        data: cancelorders
+    })
+}
+
+const orderofproduct = async (req, res) => {
+
+}
+
+const orderofseller = async (req, res) => {
+    try {
+        const orders = await Orders.find({ seller_id: req.params.seller_id });
+        console.log(orders);
+
+        if (!orders || orders.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No orders found for this user.'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Orders found successfully',
+            data: orders
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal error: ' + error.message
+        });
+    }
+}
+
 module.exports = {
     getOrder,
     listOrder,
     updateOrder,
-    addOrder,deleteorders
+    addOrder, deleteorders,
+    listorderofuser,
+    Cancelorder,
+    orderofproduct,
+    orderofseller
 }

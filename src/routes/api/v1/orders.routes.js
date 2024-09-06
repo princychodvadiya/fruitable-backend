@@ -7,10 +7,12 @@ router.get(
     '/get-order/:order_id',
     controllerOrder.getOrder
 )
+
 router.get(
     '/list-order',
     controllerOrder.listOrder
 )
+
 router.put(
     '/update-order/:order_id',
     controllerOrder.updateOrder
@@ -26,4 +28,24 @@ router.delete(
     controllerOrder.deleteorders
 )
 
-module.exports = router;
+router.get(
+    '/user/:user_id',
+    controllerOrder.listorderofuser
+)
+
+router.get(
+    '/cancel',
+    controllerOrder.Cancelorder
+)
+
+router.get(
+    '/product/:product_id',
+    controllerOrder.orderofproduct
+)
+
+router.get(
+    '/seller/:seller_id',
+    controllerOrder.orderofseller
+)
+
+module.exports = router;    
