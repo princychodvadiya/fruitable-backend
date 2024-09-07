@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:8000/api/v1
     description: local server.
-  - url: https://fruitable-backend.vercel.app
+  - url: https://fruitable-backend-akj1.vercel.app
     description: live server.
 components:
   securitySchemes:
