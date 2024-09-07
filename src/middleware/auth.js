@@ -31,9 +31,11 @@ const auth = (roles = []) => async (req, res, next) => {
 
             next()
         } catch (error) {
+            console.log(error);
+            
             return res.status(400).json({
                 success: false,
-                message: "invalid token." + error.message
+                message: "invalid token...." + error.message
             })
         }
     } catch (error) {
