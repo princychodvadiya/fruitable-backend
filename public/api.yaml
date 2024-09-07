@@ -1946,6 +1946,7 @@ paths:
                           type: integer
                         status:
                           type: string
+                          
   /payments/list-payment:
     get:
       summary: list payment.
