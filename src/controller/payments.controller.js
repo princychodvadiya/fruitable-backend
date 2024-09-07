@@ -3,6 +3,7 @@ const Payments = require("../model/payments.model");
 const listPayments = async (req, res) => {
     try {
         const payment = await Payments.find();
+        console.log("pppp", payment);
 
         if (!payment || payment.length === 0) {
             res.status(404).json({
@@ -25,7 +26,6 @@ const listPayments = async (req, res) => {
 }
 
 const getPaymentsOrder = async (req, res) => {
-
     try {
         const payment = await Payments.findById(req.params.payment_id)
 

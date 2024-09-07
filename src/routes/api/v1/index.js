@@ -22,5 +22,6 @@ router.use('/users', usersRouter);
 router.use("/reviews", ratinges);
 router.use("/orders", ordersRouter);
 router.use("/carts", cartsRouter)
+router.use("/carts", paymentsRouter)
 
 module.exports = router;
