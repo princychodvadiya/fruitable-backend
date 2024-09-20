@@ -22,19 +22,33 @@ const ordersSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        payment_id: {
-            type: mongoose.Types.ObjectId,
-            ref: "Payments",
-            required: true,
-        },
-        seller_id: {
-            type: mongoose.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
+        // payment_id: {
+        //     type: mongoose.Types.ObjectId,
+        //     ref: "Payments",
+        //     required: true,
+        // },
+        // seller_id: {
+        //     type: mongoose.Types.ObjectId,
+        //     ref: "User",
+        //     required: true,
+        // },
         status: {
             type: String,
             required: true,
+        },
+        address: {
+            street: {
+                type: String,
+                required: true,
+            },
+            block_number: {
+                type: Number,
+                required: true,
+            },
+            locality: {
+                type: String,
+                required: true,
+            },
         },
         // payment_method: {
         //     type: String,
@@ -45,16 +59,16 @@ const ordersSchema = new mongoose.Schema(
         //     required: true,
 
         // },
-        discount: {
-            type: Number,
-            require: true
-        },
-        shipping_address: {
-            type: String,
-            required: true,
-        },
+        // discount: {
+        //     type: Number,
+        //     require: true
+        // },
+        // shipping_address: {
+        //     type: String,
+        //     required: true,
+        // },
         item: [itemsScheema],
-        total_price: {
+        totalAmt: {
             type: Number,
             required: true,
         },

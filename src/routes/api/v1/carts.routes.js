@@ -19,11 +19,27 @@ router.put(
 
 router.post(
     '/add-to-cart',
-    controlleCarts.addCart
+    controlleCarts.AddTOCart
 )
 
 router.delete(
     '/delete-cart/:cart_id/:product_id',
     controlleCarts.deleteCartItem
 );
+
+router.get(
+    '/listcart',
+    controlleCarts.ListCart
+)
+
+router.put(
+    '/update-quantity/:cart_id',
+    controlleCarts.updatequantity
+);
+
+router.put(
+    '/decrement-quantity/:cart_id',
+    controlleCarts.decrementQuantity
+);
+
 module.exports = router;
