@@ -29,7 +29,7 @@ app.use(
     swaggerUi.setup(swaggerDocument, {
         swaggerOptions: {
             url: '/public/api.yaml' // Path to your YAML file
-        }
+        }   
     })
 );
 // const swaggerDocument = YAML.load('./src/api.yaml')
@@ -38,8 +38,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cookieParser())
 app.use(cors({
-    origin: 'https://fruitable-frontend.vercel.app',
-    // origin: 'http://localhost:3000',
+    // origin: 'https://fruitable-frontend.vercel.app',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 
