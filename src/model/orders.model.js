@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const itemsScheema = new mongoose.Schema(
+const itemSchema = new mongoose.Schema(
     {
         product_id: {
             type: mongoose.Types.ObjectId,
@@ -18,23 +18,8 @@ const itemsScheema = new mongoose.Schema(
 const ordersSchema = new mongoose.Schema(
     {
         user_id: {
-            type: mongoose.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
-        // payment_id: {
-        //     type: mongoose.Types.ObjectId,
-        //     ref: "Payments",
-        //     required: true,
-        // },
-        // seller_id: {
-        //     type: mongoose.Types.ObjectId,
-        //     ref: "User",
-        //     required: true,
-        // },
-        status: {
             type: String,
-            required: true,
+            // required: true,
         },
         address: {
             street: {
@@ -50,36 +35,23 @@ const ordersSchema = new mongoose.Schema(
                 required: true,
             },
         },
-        // payment_method: {
-        //     type: String,
-        //     required: true,
-        // },
-        // payment_status: {
-        //     type: String,
-        //     required: true,
-
-        // },
-        // discount: {
-        //     type: Number,
-        //     require: true
-        // },
-        // shipping_address: {
-        //     type: String,
-        //     required: true,
-        // },
-        item: [itemsScheema],
-        totalAmt: {
+        status: {
+            type: String,
+            default: 'COD',
+        },
+        total_amount: {
             type: Number,
             required: true,
         },
+        items: [itemSchema],
         isActive: {
             type: Boolean,
             default: true,
-        }
+        },
     },
     {
         timestamps: true,
-        versionKey: false
+        versionKey: false,
     }
 )
 

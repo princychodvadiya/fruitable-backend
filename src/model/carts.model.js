@@ -18,9 +18,9 @@ const itemSchema = new mongoose.Schema(
 const cartsSchema = new mongoose.Schema(
     {
         user_id: {
-            type: mongoose.Types.ObjectId,
-            ref: "Users",
-            required: true,
+            type: String,
+            // ref: "Users",
+            // required: true,
         },
         items: [itemSchema],
         isActive: {
