@@ -75,6 +75,7 @@ const updateOrder = async (req, res) => {
 const addOrder = async (req, res) => {
     try {
         const order = await Orders.create(req.body);
+        console.log("ok", order);
 
         if (!order) {
             res.status(400).json({

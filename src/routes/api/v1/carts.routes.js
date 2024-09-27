@@ -42,4 +42,9 @@ router.put(
     controlleCarts.decrementQuantity
 );
 
+router.get(
+    '/get-user/:user_id',
+    controlleCarts.getUser
+)
+
 module.exports = router;

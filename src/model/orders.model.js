@@ -18,8 +18,9 @@ const itemSchema = new mongoose.Schema(
 const ordersSchema = new mongoose.Schema(
     {
         user_id: {
-            type: String,
-            // required: true,
+            type: mongoose.Types.ObjectId,
+            ref: "Users",
+            required: true,
         },
         address: {
             street: {

@@ -264,6 +264,30 @@ const AddTOCart = async (req, res) => {
     }
 };
 
+const getUser = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const carts = await Carts.findOne({ user_id });
+
+        if (!carts) {
+            return res.status(404).json({
+                success: false,
+                message: 'Carts not found.',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Carts fetched successfully.',
+            data: carts,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error: ' + error.message,
+        });
+    }
+};
 
 module.exports = {
     updatecart,
@@ -272,5 +296,6 @@ module.exports = {
     AddTOCart,
     deleteCartItem,
     ListCart,
-    decrementQuantity
+    decrementQuantity,
+    getUser
 }
