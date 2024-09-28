@@ -275,7 +275,6 @@ const getUser = async (req, res) => {
                 message: 'Carts not found.',
             });
         }
-
         res.status(200).json({
             success: true,
             message: 'Carts fetched successfully.',
