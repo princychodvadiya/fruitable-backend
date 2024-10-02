@@ -95,7 +95,24 @@ const searchProducts = async (req, res) => {
 }
 
 const listProducts = async (req, res) => {
+    console.log("proo", req.query.page, req.query.pageSize);
+    // console.log(req.params.category_id);
+
     try {
+        const id = req.params.category_id
+        console.log("ok", id);
+
+        const page = parseInt(req.query.page)
+        const pageSize = parseInt(req.query.pageSize)
+
+        // console.log(page, pageSize);
+
+        if (page <= 0 || pageSize <= 0 || id === '') {
+            res.status(400).json({
+                success: false,
+                message: 'Invalid page or page size.',
+            })
+        }
         const products = await Products.find();
 
         if (!products || products.length === 0) {
@@ -104,11 +121,21 @@ const listProducts = async (req, res) => {
                 message: 'Products not found.'
             })
         }
+        let startIndex = 0, endIndex = 0, paginationData = [...products]
+
+        if (page > 0 && pageSize > 0) {
+            startIndex = (page - 1) * pageSize
+            endIndex = startIndex + pageSize
+            paginationData = products.slice(startIndex, endIndex)
+        }
+
         res.status(200).json({
             success: true,
             message: 'Products fetch successfully.',
-            data: products
+            data: paginationData,
+            totalPage: products.length
         })
+
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -116,6 +143,55 @@ const listProducts = async (req, res) => {
         })
     }
 }
+
+const listProductsPage = async (req, res) => {
+    try {
+        const id = req.params.category_id;
+        console.log("id", id);
+        
+        const page = parseInt(req.query.page) || 1; 
+        const pageSize = parseInt(req.query.pageSize) || 10;
+
+        // Check for valid page and pageSize
+        if (page <= 0 || pageSize <= 0 || !id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid page or page size.',
+            });
+        }
+
+        // Fetch products based on category_id
+        const products = await Products.find({ category_id: id });
+
+        // Check if products exist
+        if (!products || products.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Products not found.',
+            });
+        }
+
+        // Implement pagination
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginationData = products.slice(startIndex, endIndex);
+
+        // Create response with pagination data
+        res.status(200).json({
+            success: true,
+            message: 'Products fetched successfully.',
+            data: paginationData,
+            totalPage: Math.ceil(products.length / pageSize), // Calculate total pages
+            totalProducts: products.length, // Total number of products
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error: ' + error.message,
+        });
+    }
+};
+
 
 const getProduct = async (req, res) => {
 
@@ -534,7 +610,7 @@ const discounts = async (req, res) => {
                     subcategory_id: "$_id.subcategory_id",
                     category_name: 1,
                     subcategory_name: 1,
-                    products: 1 
+                    products: 1
                 }
             }
         ]
@@ -609,5 +685,6 @@ module.exports = {
     topRate,
     newArrivals,
     discounts,
-    variantsDatils
+    variantsDatils,
+    listProductsPage
 }

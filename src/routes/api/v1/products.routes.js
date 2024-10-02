@@ -18,6 +18,12 @@ router.get(
     controllerProducts.listProducts
 )
 
+
+router.get(
+    '/list-productpage/:category_id',
+    controllerProducts.listProductsPage
+)
+
 router.post(
     '/add-product',
     upload.single('product_image'),
