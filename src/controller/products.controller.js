@@ -148,11 +148,10 @@ const listProductsPage = async (req, res) => {
     try {
         const id = req.params.category_id;
         console.log("id", id);
-        
-        const page = parseInt(req.query.page) || 1; 
-        const pageSize = parseInt(req.query.pageSize) || 10;
 
-        // Check for valid page and pageSize
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 5;
+
         if (page <= 0 || pageSize <= 0 || !id) {
             return res.status(400).json({
                 success: false,
@@ -160,10 +159,8 @@ const listProductsPage = async (req, res) => {
             });
         }
 
-        // Fetch products based on category_id
         const products = await Products.find({ category_id: id });
 
-        // Check if products exist
         if (!products || products.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -171,18 +168,16 @@ const listProductsPage = async (req, res) => {
             });
         }
 
-        // Implement pagination
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         const paginationData = products.slice(startIndex, endIndex);
 
-        // Create response with pagination data
         res.status(200).json({
             success: true,
             message: 'Products fetched successfully.',
             data: paginationData,
-            totalPage: Math.ceil(products.length / pageSize), // Calculate total pages
-            totalProducts: products.length, // Total number of products
+            totalPage: Math.ceil(products.length / pageSize),
+            totalProducts: products.length,
         });
     } catch (error) {
         res.status(500).json({
