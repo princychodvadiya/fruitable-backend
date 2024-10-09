@@ -385,7 +385,6 @@ const orderofuser = async (req, res) => {
 const listUser = async (req, res) => {
     try {
         const user = await Users.find();
-        // console.log(variant);
 
         if (!user) {
             res.status(404).json({
