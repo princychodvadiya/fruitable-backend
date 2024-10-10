@@ -47,5 +47,9 @@ router.get(
     '/seller/:seller_id',
     controllerOrder.orderofseller
 )
+router.put(
+    '/update-order-status/:order_id',
+    controllerOrder.updateOrderStatus
+);
 
 module.exports = router;    

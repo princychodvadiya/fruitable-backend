@@ -51,6 +51,7 @@ const listOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
     try {
+
         const order = await Orders.findByIdAndUpdate(req.params.order_id, req.body, { new: true, runValidators: true });
 
         if (!order) {
@@ -187,6 +188,45 @@ const orderofseller = async (req, res) => {
     }
 }
 
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { order_id } = req.params;
+        const { status } = req.body;
+        console.log(order_id);
+
+
+        if (!order_id || !status) {
+            return res.status(400).json({
+                success: false,
+                message: 'Order ID and status are required.'
+            });
+        }
+
+        const order = await Orders.findByIdAndUpdate(order_id, { status }, { new: true, runValidators: true });
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found or not updated.'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Order status updated successfully.',
+            data: order
+        });
+
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        return res.status(500).json({
+            success: false,
+            message: `Internal Server Error: ${error.message}`
+        });
+    }
+};
+
+
 module.exports = {
     getOrder,
     listOrder,
@@ -195,5 +235,6 @@ module.exports = {
     listorderofuser,
     Cancelorder,
     orderofproduct,
-    orderofseller
+    orderofseller,
+    updateOrderStatus
 }

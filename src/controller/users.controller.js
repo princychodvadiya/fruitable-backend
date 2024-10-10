@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 const { sendMail } = require("../utils/nodemailer");
 const { pdfmake } = require("../utils/pdfmake");
+const Orders = require("../model/orders.model");
 
 const AccRefToken = async (id) => {
     try {
@@ -461,7 +462,7 @@ const reviewofuser = async (req, res) => {
 const metchUserData = async (req, res) => {
     try {
         const user = await Users.find();
-// console.log("ok222222222",user);
+        // console.log("ok222222222",user);
 
         if (!user || user.length === 0) {
             return res.status(404).json({
@@ -477,10 +478,10 @@ const metchUserData = async (req, res) => {
             role
         }));
 
-        console.log("dfht",userData);
-        
+        console.log("dfht", userData);
 
-       return res.status(200).json({
+
+        return res.status(200).json({
             success: true,
             message: 'User fetched successfully.',
             data: userData
@@ -493,6 +494,7 @@ const metchUserData = async (req, res) => {
         });
     }
 };
+
 
 
 module.exports = {
