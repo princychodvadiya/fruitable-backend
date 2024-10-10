@@ -12,6 +12,7 @@ router.get(
     '/get-user/:user_id',
     controllerUsers.getUser
 )
+
 router.post(
     '/register',
     upload.single('avtar'),
@@ -116,6 +117,7 @@ router.get(
     '/order/:user_id',
     controllerUsers.orderofuser
 )
+
 router.get(
     '/list-user',
     controllerUsers.listUser
@@ -130,11 +132,16 @@ router.delete(
     '/delete-user/:user_id',
     controllerUsers.deleteUser
 )
+
 router.get(
     '/review/:user_id',
     controllerUsers.reviewofuser
 )
 
+router.get(
+    '/metch-user',
+    controllerUsers.metchUserData
+)
 module.exports = router;
 
 

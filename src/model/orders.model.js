@@ -36,9 +36,13 @@ const ordersSchema = new mongoose.Schema(
                 required: true,
             },
         },
-        status: {
+        payment_method: {
             type: String,
             default: 'COD',
+        },
+        status: {
+            type: String,
+            default: 'pending',
         },
         total_amount: {
             type: Number,

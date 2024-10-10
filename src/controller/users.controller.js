@@ -459,6 +459,42 @@ const reviewofuser = async (req, res) => {
 
 }
 
+const metchUserData = async (req, res) => {
+    try {
+        const user = await Users.find();
+// console.log("ok222222222",user);
+
+        if (!user || user.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
+        }
+
+        const userData = user.map(({ _id, name, email, role }) => ({
+            _id,
+            name,
+            email,
+            role
+        }));
+
+        console.log("dfht",userData);
+        
+
+       return res.status(200).json({
+            success: true,
+            message: 'User fetched successfully.',
+            data: userData
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error: ' + error.message
+        });
+    }
+};
+
 
 module.exports = {
     AccRefToken,
@@ -473,5 +509,6 @@ module.exports = {
     listUser,
     updateUser,
     deleteUser,
-    reviewofuser
+    reviewofuser,
+    metchUserData
 }
