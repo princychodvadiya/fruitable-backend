@@ -5,6 +5,8 @@ const { sendMail } = require("../utils/nodemailer");
 const { pdfmake } = require("../utils/pdfmake");
 const Orders = require("../model/orders.model");
 
+const randomstring = require("randomstring");
+
 const AccRefToken = async (id) => {
     try {
         const user = await Users.findById(id);
@@ -495,7 +497,32 @@ const metchUserData = async (req, res) => {
     }
 };
 
-
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await Users.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                success: false, message: "User not found."
+            });
+        }
+        console.log(user);
+        if (user) {
+            const randomstring = randomstring.generate();
+            const updateData = await Users.updateOne({ email: email }, { $set: { token: randomstring } })
+            sendMail(user.name, user.email, randomstring)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error."
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error."
+        });
+    }
+};
 
 module.exports = {
     AccRefToken,
@@ -511,5 +538,6 @@ module.exports = {
     updateUser,
     deleteUser,
     reviewofuser,
-    metchUserData
+    metchUserData,
+    forgotPassword
 }

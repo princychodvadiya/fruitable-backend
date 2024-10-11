@@ -142,6 +142,12 @@ router.get(
     '/metch-user',
     controllerUsers.metchUserData
 )
+
+router.post(
+    '/forgot-password',
+    controllerUsers.forgotPassword
+);
+
 module.exports = router;
 
 

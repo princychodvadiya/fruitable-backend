@@ -42,6 +42,10 @@ const usersSchema = new mongoose.Schema(
         facebookId: {
             type: String
         },
+        token: {
+            type: String,
+            default: ""
+        },
         isActive: {
             type: Boolean,
             default: true,
