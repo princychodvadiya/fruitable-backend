@@ -148,6 +148,15 @@ router.post(
     controllerUsers.forgotPassword
 );
 
+router.post(
+    '/validate-otp',
+    controllerUsers.validateOtp
+);
+
+router.post(
+    '/reset-password',
+    controllerUsers.resetPassword
+);
 module.exports = router;
 
 

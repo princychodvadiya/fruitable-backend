@@ -501,25 +501,105 @@ const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await Users.findOne({ email });
+
         if (!user) {
             return res.status(404).json({
-                success: false, message: "User not found."
-            });
-        }
-        console.log(user);
-        if (user) {
-            const randomstring = randomstring.generate();
-            const updateData = await Users.updateOne({ email: email }, { $set: { token: randomstring } })
-            sendMail(user.name, user.email, randomstring)
-            return res.status(500).json({
                 success: false,
-                message: "Internal server error."
+                message: "User not found"
             });
         }
+
+        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+        console.log("Generated OTP:", otp);
+
+        await Users.updateOne({ email }, { otp });
+
+        sendMail(user.name, user.email, `Your OTP for password reset is: ${otp}`);
+
+        res.status(200).json({
+            success: true,
+            message: "OTP sent to your email"
+        });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Internal server error."
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
+const validateOtp = async (req, res) => {
+    const { otp, email } = req.body;
+
+    try {
+        const user = await Users.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        if (user.otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP."
+            });
+        }
+
+        user.otp = undefined;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "OTP validated successfully."
+        });
+    } catch (error) {
+        console.error('OTP validation error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    try {
+        if (!newPassword || newPassword.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: "New password is required."
+            });
+        }
+
+        const user = await Users.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+
+        user.otp = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset successfully."
+        });
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
         });
     }
 };
@@ -539,5 +619,7 @@ module.exports = {
     deleteUser,
     reviewofuser,
     metchUserData,
-    forgotPassword
+    forgotPassword,
+    validateOtp,
+    resetPassword
 }

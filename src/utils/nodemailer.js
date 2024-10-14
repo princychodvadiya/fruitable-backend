@@ -1,7 +1,9 @@
 var nodemailer = require('nodemailer');
 const path = require('path');
 
-const sendMail = () => {
+const sendMail = (name, email, otp) => {
+    console.log("rg5r6thuy67", name, email, otp);
+
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -14,7 +16,7 @@ const sendMail = () => {
         from: 'chodvadiyaprinci@gmail.com',
         to: 'sanjanatalaviya1011@gmail.com',
         subject: 'Sending Email using Node.js',
-        text: 'demo!!!!',
+        text: `${name},\nYour OTP is: ${otp}\nThank you!`
         // attachments: [
         //     {
         //         filename: 'image',
