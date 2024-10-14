@@ -14,7 +14,7 @@ const sendMail = (name, email, otp) => {
 
     var mailOptions = {
         from: 'chodvadiyaprinci@gmail.com',
-        to: 'sanjanatalaviya1011@gmail.com',
+        to: 'chodvadiyaprinci@gmail.com',
         subject: 'Sending Email using Node.js',
         text: `${name},\nYour OTP is: ${otp}\nThank you!`
         // attachments: [
