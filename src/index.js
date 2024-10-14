@@ -38,8 +38,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cookieParser())
 app.use(cors({
-    // origin: 'https://fruitable-frontend.vercel.app',
-    origin: 'http://localhost:3000',
+    origin: 'https://fruitable-frontend.vercel.app',
+    // origin: 'http://localhost:3000',
     credentials: true
 }));
 
