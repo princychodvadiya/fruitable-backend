@@ -46,6 +46,9 @@ const usersSchema = new mongoose.Schema(
             type: String,
             default: ""
         },
+        otp: {
+            type: String
+        },
         isActive: {
             type: Boolean,
             default: true,

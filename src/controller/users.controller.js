@@ -530,9 +530,11 @@ const forgotPassword = async (req, res) => {
 
 const validateOtp = async (req, res) => {
     const { otp, email } = req.body;
+    console.log(otp);
 
     try {
         const user = await Users.findOne({ email });
+        console.log("user", user);
 
         if (!user) {
             return res.status(404).json({
@@ -540,15 +542,14 @@ const validateOtp = async (req, res) => {
                 message: "User not found."
             });
         }
-
         if (user.otp !== otp) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid OTP."
             });
         }
-
         user.otp = undefined;
+
         await user.save();
 
         res.status(200).json({

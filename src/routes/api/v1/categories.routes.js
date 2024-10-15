@@ -16,7 +16,7 @@ router.get(
 
 router.get(
     '/list-categories',
-    auth(["admin", "employe", "user"]),
+    // auth(["admin", "employe", "user"]),
     controllerCategories.listCategories
 )
 
