@@ -72,7 +72,6 @@ const register = async (req, res) => {
         const newdata = await Users.create({ ...req.body, password: hashpassoword })
         console.log("newdata", newdata);
 
-        // 
         if (!newdata) {
             return res.status(500).json({
                 success: false,
@@ -624,3 +623,53 @@ module.exports = {
     validateOtp,
     resetPassword
 }
+
+// const register = async (req, res) => {
+//     try {
+//         console.log(req.body);
+
+//         const { email, password } = req.body;
+//         const user = await Users.findOne({ $or: [{ email }] });
+
+//         if (user) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "User already exists",
+//             });
+//         }
+
+//         const hashPassword = await bcrypt.hash(password, 10);
+//         if (!hashPassword) {
+//             return res.status(409).json({
+//                 success: false,
+//                 message: "Password hashing error.",
+//             });
+//         }
+
+//         const newUser = await Users.create({ ...req.body, password: hashPassword });
+
+//         if (!newUser) {
+//             return res.status(500).json({
+//                 success: false,
+//                 message: "Internal server error.",
+//             });
+//         }
+
+//         const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+//         await Users.updateOne({ _id: newUser._id }, { otp });
+
+//         sendMail(newUser.name, newUser.email, `Your OTP for registration is: ${otp}`);
+
+//         res.status(201).json({
+//             success: true,
+//             message: "User created successfully. An OTP has been sent to your email.",
+//             data: { ...newUser.toObject(), password: undefined, otp: undefined }
+//         });
+
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Internal server error." + error.message,
+//         });
+//     }
+// };

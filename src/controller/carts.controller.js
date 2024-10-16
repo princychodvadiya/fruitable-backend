@@ -163,7 +163,6 @@ const deleteCartItem = async (req, res) => {
 
         if (!cart) {
             return res.status(404).json({
-
                 success: false,
                 message: 'Cart not found'
             });
@@ -288,6 +287,33 @@ const getUser = async (req, res) => {
     }
 };
 
+const DeleteCart = async (req, res) => {
+    try {
+        console.log(req.params.cart_id);
+
+        const cart = await Carts.findByIdAndDelete(req.params.cart_id)
+        console.log(cart);
+
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: 'Cart not found',
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Cart deleted successfully',
+            data: cart,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Internal Server Error: ' + error.message,
+        });
+    }
+};
+
+
 module.exports = {
     updatecart,
     getcartUser,
@@ -296,5 +322,6 @@ module.exports = {
     deleteCartItem,
     ListCart,
     decrementQuantity,
-    getUser
+    getUser,
+    DeleteCart
 }

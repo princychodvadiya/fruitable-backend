@@ -47,4 +47,9 @@ router.get(
     controlleCarts.getUser
 )
 
+router.delete(
+    '/delete-cart/:cart_id',
+    controlleCarts.DeleteCart
+)
+
 module.exports = router;
