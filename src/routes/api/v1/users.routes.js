@@ -15,21 +15,21 @@ router.get(
 
 router.post(
     '/register',
-    upload.single('avtar'),
+    // upload.single('avtar'),
     controllerUsers.register
 )
 
 router.post(
-    '/registerOTP',
-    sendOTP,
-    controllerUsers.registerOTP
+    '/registerverifyOTP',
+    // sendOTP,
+    controllerUsers.registerverifyOTP
 )
 
-router.get(
-    '/verifyOTP',
-    verifyOTP,
-    controllerUsers.registerOTP
-)
+// router.get(
+//     '/verifyOTP',
+//     verifyOTP,
+//     controllerUsers.registerverifyOTP
+// )
 
 router.post(
     '/login',

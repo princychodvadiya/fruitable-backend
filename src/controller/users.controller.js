@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 const { sendMail } = require("../utils/nodemailer");
 const { pdfmake } = require("../utils/pdfmake");
-const Orders = require("../model/orders.model");
 
 const randomstring = require("randomstring");
 
@@ -44,14 +43,15 @@ const AccRefToken = async (id) => {
 
 const register = async (req, res) => {
     try {
-        console.log(req.body);
+        console.log("sdssss", req.body);
         // console.log(req.file);
 
-        const { email, password } = req.body;
+        const { email, password, name } = req.body;
         const user = await Users.findOne(
             { $or: [{ email }] }
         );
-        console.log("ok", user);
+        console.log("okttt", user);
+
         if (user) {
             return res.status(400).json({
                 success: false,
@@ -60,7 +60,7 @@ const register = async (req, res) => {
         }
 
         const hashpassoword = await bcrypt.hash(password, 10);
-        console.log("ok", hashpassoword);
+        console.log("ok4444", hashpassoword);
 
         if (!hashpassoword) {
             return res.status(409).json({
@@ -87,7 +87,13 @@ const register = async (req, res) => {
                 message: "internal server erorr.",
             });
         }
-        // sendMail();
+        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+        // console.log("Generated:", otp);
+
+        await Users.updateOne({ email }, { otp });
+
+        sendMail(newdataf.name, newdataf.email, `Your OTP for password reset is: ${otp}`);
+
         res.status(201).json({
             success: true,
             message: "user created successfully.",
@@ -102,11 +108,43 @@ const register = async (req, res) => {
     }
 }
 
-const registerOTP = async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "registerOTP successfully send."
-    });
+const registerverifyOTP = async (req, res) => {
+    const { otp, email } = req.body;
+    console.log("u8ijhcf", otp, email);
+
+    try {
+        const user = await Users.findOne({ email });
+        console.log("user", user);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+        console.log(otp);
+
+        if (user.otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP."
+            });
+        }
+        user.otp = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "OTP validated successfully."
+        });
+    } catch (error) {
+        console.error('OTP validation error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
 }
 
 const verifyOTP = async (req, res) => {
@@ -610,7 +648,7 @@ module.exports = {
     login,
     newToken,
     logout,
-    registerOTP, verifyOTP,
+    registerverifyOTP, verifyOTP,
     chackAuth,
     getUser,
     orderofuser,
