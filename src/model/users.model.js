@@ -26,7 +26,7 @@ const usersSchema = new mongoose.Schema(
         password: {
             type: String
         },
-        avtar: {
+        profile: {
             type: String
         },
         // phone: {

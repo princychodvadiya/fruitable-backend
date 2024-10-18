@@ -642,6 +642,43 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const updateUserProfile = async (req, res) => {
+    // const { user_id } = req.params;
+    // const { name, email } = req.body;
+    // console.log(req.params, req.body);
+    console.log(req.file);
+
+    // let profile;
+
+    // if (req.file) {
+    //     profile = req.file.path;
+    // }
+    // console.log(profile, req.file.path);
+
+    try {
+        const updatedUser = await Users.findByIdAndUpdate(user_id, { name, email }, { new: true });
+        console.log(updatedUser);
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "user update successfully.",
+            data: updateUser
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+
+}
+
 module.exports = {
     AccRefToken,
     register,
@@ -659,7 +696,8 @@ module.exports = {
     metchUserData,
     forgotPassword,
     validateOtp,
-    resetPassword
+    resetPassword,
+    updateUserProfile
 }
 
 // const register = async (req, res) => {

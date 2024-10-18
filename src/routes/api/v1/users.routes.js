@@ -158,6 +158,12 @@ router.post(
     controllerUsers.resetPassword
 );
 
+router.put(
+    '/update-profile/:user_id',
+    // upload.single('proflie'),
+    controllerUsers.updateUserProfile
+)
+
 module.exports = router;
 
 
