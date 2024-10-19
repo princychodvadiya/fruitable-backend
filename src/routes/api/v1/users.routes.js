@@ -15,7 +15,7 @@ router.get(
 
 router.post(
     '/register',
-    // upload.single('avtar'),
+    upload.single('avtar'),
     controllerUsers.register
 )
 
@@ -160,7 +160,7 @@ router.post(
 
 router.put(
     '/update-profile/:user_id',
-    // upload.single('proflie'),
+    upload.single('avtar'),
     controllerUsers.updateUserProfile
 )
 

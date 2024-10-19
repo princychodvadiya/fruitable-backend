@@ -5,6 +5,7 @@ const { sendMail } = require("../utils/nodemailer");
 const { pdfmake } = require("../utils/pdfmake");
 
 const randomstring = require("randomstring");
+const uploadFile = require("../utils/cloudinary");
 
 const AccRefToken = async (id) => {
     try {
@@ -43,62 +44,136 @@ const AccRefToken = async (id) => {
 
 const register = async (req, res) => {
     try {
-        console.log("sdssss", req.body);
+        // console.log("sdssss", req.body);
         // console.log(req.file);
 
-        const { email, password, name } = req.body;
-        const user = await Users.findOne(
-            { $or: [{ email }] }
-        );
-        console.log("okttt", user);
+        if (req.file) {
+            const { email, password, name } = req.body;
 
-        if (user) {
-            return res.status(400).json({
-                success: false,
-                message: "User already exists",
+            const fileRes = await uploadFile(req.file.path, "avtar");
+            console.log("Uploaded File", fileRes);
+
+            const user = await Users.findOne(
+                { $or: [{ email }] }
+            );
+            // console.log("okttt", user);
+
+            if (user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "User already exists",
+                });
+            }
+
+            const hashpassoword = await bcrypt.hash(password, 10);
+            console.log("ok4444", hashpassoword);
+
+            if (!hashpassoword) {
+                return res.status(409).json({
+                    success: false,
+                    message: "password is valid while hasing error.",
+                });
+            }
+
+            const newdata = await Users.create({
+                ...req.body,
+                password: hashpassoword,
+                avtar: {
+                    public_id: fileRes.public_id,
+                    url: fileRes.url
+                }
+            })
+            console.log("newdata", newdata);
+
+            if (!newdata) {
+                return res.status(500).json({
+                    success: false,
+                    message: "internal server erorr.",
+                });
+            }
+
+            const newdataf = await Users.findById({ _id: newdata._id }).select("-password");
+
+            if (!newdataf) {
+                return res.status(500).json({
+                    success: false,
+                    message: "internal server erorr.",
+                });
+            }
+            const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+            // console.log("Generated:", otp);
+
+            await Users.updateOne({ email }, { otp });
+
+            sendMail(newdataf.name, newdataf.email, `Your OTP for password reset is: ${otp}`);
+
+            res.status(201).json({
+                success: true,
+                message: "user created successfully.",
+                data: newdataf
             });
+
+        } else {
+            const { email, password, name } = req.body;
+
+            const user = await Users.findOne(
+                { $or: [{ email }] }
+            );
+            // console.log("okttt", user);
+
+            if (user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "User already exists",
+                });
+            }
+
+            const hashpassoword = await bcrypt.hash(password, 10);
+            console.log("ok4444", hashpassoword);
+
+            if (!hashpassoword) {
+                return res.status(409).json({
+                    success: false,
+                    message: "password is valid while hasing error.",
+                });
+            }
+
+            const newdata = await Users.create({
+                ...req.body,
+                password: hashpassoword
+            })
+            console.log("newdata", newdata);
+
+            if (!newdata) {
+                return res.status(500).json({
+                    success: false,
+                    message: "internal server erorr.",
+                });
+            }
+
+            const newdataf = await Users.findById({ _id: newdata._id }).select("-password");
+
+            if (!newdataf) {
+                return res.status(500).json({
+                    success: false,
+                    message: "internal server erorr.",
+                });
+            }
+            const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+            // console.log("Generated:", otp);
+
+            await Users.updateOne({ email }, { otp });
+
+            sendMail(newdataf.name, newdataf.email, `Your OTP for password reset is: ${otp}`);
+
+            res.status(201).json({
+                success: true,
+                message: "user created successfully.",
+                data: newdataf
+            });
+
         }
 
-        const hashpassoword = await bcrypt.hash(password, 10);
-        console.log("ok4444", hashpassoword);
-
-        if (!hashpassoword) {
-            return res.status(409).json({
-                success: false,
-                message: "password is valid while hasing error.",
-            });
-        }
-
-        const newdata = await Users.create({ ...req.body, password: hashpassoword })
-        console.log("newdata", newdata);
-
-        if (!newdata) {
-            return res.status(500).json({
-                success: false,
-                message: "internal server erorr.",
-            });
-        }
-
-        const newdataf = await Users.findById({ _id: newdata._id }).select("-password");
-
-        if (!newdataf) {
-            return res.status(500).json({
-                success: false,
-                message: "internal server erorr.",
-            });
-        }
-        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
-        // console.log("Generated:", otp);
-
-        await Users.updateOne({ email }, { otp });
-
-        sendMail(newdataf.name, newdataf.email, `Your OTP for password reset is: ${otp}`);
-
-        res.status(201).json({
-            success: true,
-            message: "user created successfully.",
-            data: newdataf
-        });
 
     } catch (error) {
         res.status(500).json({
@@ -646,37 +721,64 @@ const updateUserProfile = async (req, res) => {
     // const { user_id } = req.params;
     // const { name, email } = req.body;
     // console.log(req.params, req.body);
-    console.log(req.file);
+    if (req.file) {
+        try {
+            const fileRes = await uploadFile(req.file.path, "avtar");
+            console.log("Uploaded File", fileRes);
 
-    // let profile;
+            const newdata = await Users.create({
+                ...req.body,
+                avtar: {
+                    public_id: fileRes.public_id,
+                    url: fileRes.url
+                }
+            })
+            console.log("newdata", newdata);
 
-    // if (req.file) {
-    //     profile = req.file.path;
-    // }
-    // console.log(profile, req.file.path);
+            const updatedUser = await Users.findByIdAndUpdate(req.params.user_id, newdata, { name, email }, { new: true, runValidators: true });
+            console.log(updatedUser);
 
-    try {
-        const updatedUser = await Users.findByIdAndUpdate(user_id, { name, email }, { new: true });
-        console.log(updatedUser);
-
-        if (!updatedUser) {
-            return res.status(404).json({
+            if (!updatedUser) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found."
+                });
+            }
+            res.status(200).json({
+                success: true,
+                message: "user update successfully.",
+                data: updateUser
+            });
+        } catch (error) {
+            res.status(500).json({
                 success: false,
-                message: "User not found."
+                message: "Internal server error: " + error.message
             });
         }
-        res.status(200).json({
-            success: true,
-            message: "user update successfully.",
-            data: updateUser
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Internal server error: " + error.message
-        });
-    }
+    } else {
+        try {
+            const updatedUser = await Users.findByIdAndUpdate(req.params.user_id, { name, email }, req.body, { new: true, runValidators: true });
+            console.log(updatedUser);
 
+            if (!updatedUser) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found."
+                });
+            }
+            res.status(200).json({
+                success: true,
+                message: "user update successfully.",
+                data: updateUser
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal server error: " + error.message
+            });
+        }
+
+    }
 }
 
 module.exports = {

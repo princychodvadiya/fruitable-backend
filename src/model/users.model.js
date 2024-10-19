@@ -26,8 +26,11 @@ const usersSchema = new mongoose.Schema(
         password: {
             type: String
         },
-        profile: {
-            type: String
+        avtar: {
+            type: {
+                public_id: String,
+                url: String
+            }
         },
         // phone: {
         //     type: number,
@@ -41,10 +44,6 @@ const usersSchema = new mongoose.Schema(
         // },
         facebookId: {
             type: String
-        },
-        token: {
-            type: String,
-            default: ""
         },
         otp: {
             type: String
