@@ -718,68 +718,47 @@ const resetPassword = async (req, res) => {
 };
 
 const updateUserProfile = async (req, res) => {
-    // const { user_id } = req.params;
-    // const { name, email } = req.body;
-    // console.log(req.params, req.body);
-    if (req.file) {
-        try {
+    const { user_id } = req.params;
+    const { name, email } = req.body;
+
+    try {
+        let updateData = {};
+
+        if (req.file) {
             const fileRes = await uploadFile(req.file.path, "avtar");
             console.log("Uploaded File", fileRes);
 
-            const newdata = await Users.create({
-                ...req.body,
-                avtar: {
-                    public_id: fileRes.public_id,
-                    url: fileRes.url
-                }
-            })
-            console.log("newdata", newdata);
-
-            const updatedUser = await Users.findByIdAndUpdate(req.params.user_id, newdata, { name, email }, { new: true, runValidators: true });
-            console.log(updatedUser);
-
-            if (!updatedUser) {
-                return res.status(404).json({
-                    success: false,
-                    message: "User not found."
-                });
-            }
-            res.status(200).json({
-                success: true,
-                message: "user update successfully.",
-                data: updateUser
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: "Internal server error: " + error.message
-            });
+            updateData.avtar = {
+                public_id: fileRes.public_id,
+                url: fileRes.url,
+            };
         }
-    } else {
-        try {
-            const updatedUser = await Users.findByIdAndUpdate(req.params.user_id, { name, email }, req.body, { new: true, runValidators: true });
-            console.log(updatedUser);
 
-            if (!updatedUser) {
-                return res.status(404).json({
-                    success: false,
-                    message: "User not found."
-                });
-            }
-            res.status(200).json({
-                success: true,
-                message: "user update successfully.",
-                data: updateUser
-            });
-        } catch (error) {
-            res.status(500).json({
+        if (name) updateData.name = name;
+        if (email) updateData.email = email;
+
+        const updatedUser = await Users.findByIdAndUpdate(user_id, updateData, { new: true, runValidators: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({
                 success: false,
-                message: "Internal server error: " + error.message
+                message: "User not found.",
             });
         }
 
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully.",
+            data: updatedUser,
+        });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message,
+        });
     }
-}
+};
 
 module.exports = {
     AccRefToken,
